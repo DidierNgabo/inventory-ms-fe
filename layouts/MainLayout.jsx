@@ -6,7 +6,7 @@ const { Content, Footer } = Layout;
 
 const MainLayout = ({ children }) => {
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }} hasSider>
       <Sidebar />
       <Layout className="site-layout">
         <Topbar />

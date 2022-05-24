@@ -1,9 +1,8 @@
 import Head from "next/head";
 import Widgets from "../components/Widgets";
-import MainLayout from "../layouts/MainLayout";
 import CardLineChart from "../components/CardLineChart";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -11,12 +10,19 @@ export default function Home() {
       </Head>
       <div>
         <Widgets />
-        <CardLineChart />
+        <div className="w-full flex p-2 items-center justify-center">
+          <div className="w-1/2 p-1">
+            <CardLineChart />
+          </div>
+          <div className="w-1/2 p-1">
+            <CardLineChart />
+          </div>
+        </div>
       </div>
     </>
   );
-}
+};
 
-// Home.getLayout = function getLayout(page) {
-//   return <MainLayout>{page}</MainLayout>;
-// };
+Home.layout = "L1";
+
+export default Home;

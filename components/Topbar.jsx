@@ -17,7 +17,7 @@ export default function Topbar() {
       <div className="w-full">
         <div className=" w-full flex items-center justify-between">
           <div className="">
-            <span className="text-xl font-mono font-semibold">Anik Rwanda</span>
+            <span className="text-xl font-mono font-semibold">Dashboard</span>
           </div>
           <div className=" w-1/3 flex items-center justify-evenly">
             <div className="topbarIconContainer">

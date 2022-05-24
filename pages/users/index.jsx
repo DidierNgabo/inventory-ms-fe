@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { Button, message, Popconfirm, Table, Tag } from "antd";
+import { Button, message, Popconfirm, Spin, Table, Tag } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -11,15 +11,19 @@ import Search from "antd/lib/input/Search";
 import MainLayout from "../../layouts/MainLayout";
 import Link from "next/link";
 import CustomTable from "../../components/CustomTable";
+import { UsersContext } from "../../context/UserContext";
 
-export const getStaticProps = async () => {
-  const response = await axios.get("http://localhost:4000/api/users");
-  return {
-    props: { users: response.data },
-  };
-};
+// export const getStaticProps = async () => {
 
-const Users = ({ users }) => {
+//   // const response = await axios.get("http://localhost:4000/api/users");
+//   return {
+//     props: { users: data, error, isLoaded },
+//   };
+// };
+
+const Users = () => {
+  const { data, error, isLoaded } = React.useContext(UsersContext);
+  console.log(data);
   const confirm = async (id) => {
     console.log(id);
     try {
@@ -86,11 +90,20 @@ const Users = ({ users }) => {
       ),
     },
   ];
-  return <CustomTable data={users} columns={columns} addNewLink="/users/new" />;
+  return (
+    <>
+      {isLoaded && (
+        <CustomTable data={data} columns={columns} addNewLink="/users/new" />
+      )}
+      {!isLoaded && (
+        <div className="h-full flex items-center text-2xl justify-center">
+          <Spin size="large" />
+        </div>
+      )}
+    </>
+  );
 };
 
-Users.getLayout = function getLayout(page) {
-  return <MainLayout>{page}</MainLayout>;
-};
+Users.layout = "L1";
 
 export default Users;

@@ -51,13 +51,19 @@ export default function Sidebar() {
           <Menu.Item icon={<TeamOutlined />} key="4">
             <Link href="/users/">Users</Link>
           </Menu.Item>
-          <SubMenu key="sub2" icon={<TeamOutlined />} title="Items">
+          <SubMenu key="sub2" icon={<TeamOutlined />} title="Inventory">
             <Menu.Item key="6"> Items</Menu.Item>
-            <Menu.Item key="7"> new Item</Menu.Item>
+            <Menu.Item key="7"> Categories</Menu.Item>
           </SubMenu>
-          <SubMenu key="sub3" icon={<TeamOutlined />} title="Pharmacies">
-            <Menu.Item key="8">Pharmacies</Menu.Item>
-            <Menu.Item key="9">new Pharmacy</Menu.Item>
+          <SubMenu key="sub3" icon={<TeamOutlined />} title="Stock Control">
+            <Menu.Item key="8">Orders/Reorders</Menu.Item>
+            <Menu.Item key="9">Stock Issuance</Menu.Item>
+            <Menu.Item key="10">Stock Adjustment</Menu.Item>
+            <Menu.Item key="11">Stock Return</Menu.Item>
+          </SubMenu>
+          <SubMenu key="sub4" icon={<TeamOutlined />} title="Operations">
+            <Menu.Item key="12">Quotations</Menu.Item>
+            <Menu.Item key="13">Requests</Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

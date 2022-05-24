@@ -1,23 +1,20 @@
 import axios from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
 
 export const useApiRequest = (url) => {
-  const [data, setData] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
+  const [data, setData] = React.useState([]);
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(url);
-        console.log(reponse);
         if (response) {
           setIsLoaded(true);
           setData(response.data);
         }
       } catch (error) {
-        console.log(error);
         setError(error);
       }
     };
