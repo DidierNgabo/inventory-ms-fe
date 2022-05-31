@@ -101,8 +101,6 @@ const newUser = () => {
   );
 };
 
-newUser.getLayout = function getLayout(page) {
-  return <MainLayout>{page}</MainLayout>;
-};
+newUser.layout = "L1";
 
 export default newUser;

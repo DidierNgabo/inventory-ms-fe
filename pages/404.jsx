@@ -17,8 +17,6 @@ const NotFound = () => {
   );
 };
 
-NotFound.getLayout = function getLayout(page) {
-  return <MainLayout>{page}</MainLayout>;
-};
+NotFound.layout = "L1";
 
 export default NotFound;

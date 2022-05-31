@@ -4,12 +4,23 @@ import { useApiRequest } from "../hooks/ApiRequest";
 export const UsersContext = React.createContext();
 
 const UsersProvider = ({ children }) => {
+  const [user, setUser] = React.useState("");
   const { data, error, isLoaded } = useApiRequest(
     "http://localhost:4000/api/users"
   );
 
-  console.log(data);
+  const findOne = (id) => {
+    const { data, error, isLoaded } = useApiRequest(
+      `http://localhost:4000/api/users/${id}`
+    );
+    if (data) {
+      return data;
+    }
+    return error;
+  };
+
   const value = {
+    findOne,
     data,
     error,
     isLoaded,
@@ -21,3 +32,7 @@ const UsersProvider = ({ children }) => {
 };
 
 export default UsersProvider;
+
+export const useUsers = () => {
+  return React.useContext(UsersContext);
+};

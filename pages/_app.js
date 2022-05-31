@@ -5,6 +5,7 @@ import MainLayout from "../layouts/MainLayout";
 import React from "react";
 import NextNProgress from "nextjs-progressbar";
 import AccountLayout from "../layouts/Account";
+import CategoriesProvider from "../context/CategoryContext";
 
 const layouts = {
   L1: MainLayout,
@@ -16,10 +17,12 @@ function MyApp({ Component, pageProps }) {
   const Layout = layouts[Component.layout] || ((children) => <>{children}</>);
   return (
     <UsersProvider>
-      <NextNProgress />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <CategoriesProvider>
+        <NextNProgress />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </CategoriesProvider>
     </UsersProvider>
   );
 }

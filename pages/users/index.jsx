@@ -1,25 +1,10 @@
 import React from "react";
 import axios from "axios";
 import { Button, message, Popconfirm, Spin, Table, Tag } from "antd";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import Search from "antd/lib/input/Search";
-import MainLayout from "../../layouts/MainLayout";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import CustomTable from "../../components/CustomTable";
 import { UsersContext } from "../../context/UserContext";
-
-// export const getStaticProps = async () => {
-
-//   // const response = await axios.get("http://localhost:4000/api/users");
-//   return {
-//     props: { users: data, error, isLoaded },
-//   };
-// };
 
 const Users = () => {
   const { data, error, isLoaded } = React.useContext(UsersContext);
@@ -37,11 +22,6 @@ const Users = () => {
       message.error(error.message);
     }
   };
-
-  function cancel(e) {
-    console.log(e);
-    message.error("Click on No");
-  }
 
   const columns = [
     {
@@ -76,11 +56,12 @@ const Users = () => {
           <Link href="/users/edit/">
             <Button type="ghost" icon={<EditOutlined />} size="small" />
           </Link>
-          <Button type="ghost" icon={<EyeOutlined />} size="small" />
+          <Link href={`/users/${record.id}`}>
+            <Button type="ghost" icon={<EyeOutlined />} size="small" />
+          </Link>
           <Popconfirm
             title="Are you sure to delete this user?"
             onConfirm={() => confirm(record.id)}
-            onCancel={cancel}
             okText="Yes"
             cancelText="No"
           >
