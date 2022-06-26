@@ -1,42 +1,57 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
-import { CategoriesContext } from "../../context/CategoryContext";
+import { useCategoryContext } from "../context/CategoryContext";
 
-const newCategory = () => {
-  const { saveCategory } = React.useContext(CategoriesContext);
+const UpdateCategoryModal = ({ category, visible, hide }) => {
+  const { updateCategory } = useCategoryContext();
   const [form] = useForm();
   const router = useRouter();
 
+  if (category) {
+    form.setFieldsValue({
+      id: category.id,
+      name: category.name,
+      description: category.description,
+    });
+  }
+
   const onFinish = (values) => {
     try {
-      saveCategory(values);
+      updateCategory(values);
       form.resetFields();
+      hide();
       router.push("/categories");
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
     message.error(errorInfo);
   };
 
   return (
-    <div className="w-3/5 mx-auto">
-      <h2 className="text-center mb-10 mt-3 text-xl font-semibold">
-        Add new Category
-      </h2>
+    <Modal
+      title="Update Category"
+      centered
+      visible={visible}
+      onOk={hide}
+      okText="Submit"
+      onCancel={hide}
+      width={1000}
+    >
       <Form
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
+        form={form}
       >
+        <Form.Item label="id" hidden name="id">
+          <Input hidden />
+        </Form.Item>
         <Form.Item
           rules={[{ required: true, message: "Please input category name" }]}
           label="Name"
@@ -61,11 +76,8 @@ const newCategory = () => {
           </Button>
         </Form.Item>
       </Form>
-    </div>
+    </Modal>
   );
 };
 
-newCategory.auth = true;
-newCategory.layout = "L1";
-
-export default newCategory;
+export default UpdateCategoryModal;

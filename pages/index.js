@@ -23,6 +23,7 @@ const Home = () => {
   );
 };
 
+Home.auth = true;
 Home.layout = "L1";
 
 export default Home;

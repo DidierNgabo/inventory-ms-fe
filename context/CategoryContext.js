@@ -1,6 +1,6 @@
 import { message } from "antd";
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
 import { useApiRequest } from "../hooks/ApiRequest";
 
 export const CategoriesContext = React.createContext();
@@ -19,7 +19,23 @@ const CategoriesProvider = ({ children }) => {
         return response.data;
       }
     } catch (error) {
-      console.log(error.message);
+      message.error(error.message);
+    }
+  };
+
+  const updateCategory = async (values) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/categories/${values.id}`,
+        values
+      );
+
+      if (response) {
+        data.push(values);
+        message.success(response.data.message);
+      }
+    } catch (error) {
+      message.error(error.message);
     }
   };
 
@@ -35,7 +51,6 @@ const CategoriesProvider = ({ children }) => {
         message.success(response.data.message);
       }
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };
@@ -44,6 +59,7 @@ const CategoriesProvider = ({ children }) => {
     data,
     deleteCategory,
     saveCategory,
+    updateCategory,
     error,
     isLoaded,
   };
@@ -56,3 +72,7 @@ const CategoriesProvider = ({ children }) => {
 };
 
 export default CategoriesProvider;
+
+export const useCategoryContext = () => {
+  return useContext(CategoriesContext);
+};

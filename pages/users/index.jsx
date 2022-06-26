@@ -8,9 +8,7 @@ import { UsersContext } from "../../context/UserContext";
 
 const Users = () => {
   const { data, error, isLoaded } = React.useContext(UsersContext);
-  console.log(data);
   const confirm = async (id) => {
-    console.log(id);
     try {
       const response = await axios.delete(
         `http://localhost:4000/api/users/${id}`
@@ -85,6 +83,7 @@ const Users = () => {
   );
 };
 
+Users.auth = true;
 Users.layout = "L1";
 
 export default Users;

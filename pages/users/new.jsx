@@ -101,6 +101,7 @@ const newUser = () => {
   );
 };
 
+newUser.auth = true;
 newUser.layout = "L1";
 
 export default newUser;

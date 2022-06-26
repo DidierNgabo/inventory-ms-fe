@@ -35,6 +35,7 @@ const SingleUser = ({ user }) => {
   );
 };
 
+SingleUser.auth = true;
 SingleUser.layout = "L1";
 
 export default SingleUser;

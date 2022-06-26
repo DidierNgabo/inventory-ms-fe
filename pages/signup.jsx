@@ -16,16 +16,14 @@ const Signup = () => {
       if (response) {
         message.success("User created successfully");
         form.resetFields();
-        router.push("/users");
+        router.push("/login");
       }
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
     message.error(errorInfo);
   };
   return (

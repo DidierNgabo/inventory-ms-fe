@@ -1,31 +1,47 @@
 import axios from "axios";
-import React from "react";
-import { useApiRequest } from "../hooks/ApiRequest";
+import { useRouter } from "next/router";
 
+import React, { useContext } from "react";
 
-const AuthProvider = ({children}) =>{
- 
-    const [token,setToken] = React.useState(localStorage.getItem("userToken"));
-    const [user,setUser] = React.useState(localStorage.getItem('user'));
+export const AuthProvider = ({ children }) => {
+  const router = useRouter();
+  const [token, setToken] = React.useState();
+  const [user, setUser] = React.useState();
 
-    const login = async () =>{
-        try {
-            const response =  await axios.post('http://localhost:4000/auth/login',values);
-            if(response){
-                localStorage.setItem("userToken",response.data.token);
-                setToken(localStorage.getItem('userToken'));
-                localStorage.setItem("user",JSON.stringify(res.data.user));
-            }
-        } catch (error) {
-            
-        }
+  const login = async (values) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4000/auth/login",
+        values
+      );
+      if (response) {
+        // const serialized = serialize("authToken", response.data.token, {
+        //   httpOnly: true,
+        //   secure: true,
+        //   sameSite: "strict",
+        //   maxAge: 60 * 60 * 24 * 5,
+        //   path: "/",
+        // });
+        localStorage.setItem("authToken", response.data.token);
+        setToken(response.data.token);
+        setUser(response.data.user);
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
     }
-    
-    const value={
-        user,
-        error
-    }
-}
+  };
 
+  const value = {
+    user,
+    login,
+    token,
+  };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
 
 export const AuthContext = React.createContext();
+
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
