@@ -6,11 +6,13 @@ const { Content, Footer } = Layout;
 
 const MainLayout = ({ children }) => {
   return (
-    <Layout style={{ minHeight: "100vh" }} hasSider>
+    <Layout>
       <Sidebar />
       <Layout className="site-layout">
         <Topbar />
-        <Content style={{ margin: "10px 16px" }}>{children}</Content>
+        <Content style={{ margin: "10px 16px", overflow: "initial" }}>
+          {children}
+        </Content>
         <Footer style={{ textAlign: "center" }}>Anik Rwanda ©2022</Footer>
       </Layout>
     </Layout>

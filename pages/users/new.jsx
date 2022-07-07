@@ -46,7 +46,7 @@ const newUser = () => {
           label="Name"
           name="name"
         >
-          <Input />
+          <Input className="rounded-lg" />
         </Form.Item>
         <Form.Item
           hasFeedback

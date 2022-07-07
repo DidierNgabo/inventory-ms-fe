@@ -1,6 +1,5 @@
 import { Button, Form, Input, message } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import axios from "axios";
 import { useRouter } from "next/router";
 import React from "react";
 import { CategoriesContext } from "../../context/CategoryContext";
@@ -27,7 +26,7 @@ const newCategory = () => {
   };
 
   return (
-    <div className="w-3/5 mx-auto">
+    <div className="w-1/3 mx-auto">
       <h2 className="text-center mb-10 mt-3 text-xl font-semibold">
         Add new Category
       </h2>
@@ -41,6 +40,7 @@ const newCategory = () => {
           rules={[{ required: true, message: "Please input category name" }]}
           label="Name"
           name="name"
+          className="rounded-lg"
         >
           <Input />
         </Form.Item>

@@ -7,9 +7,24 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import UpdateCategoryModal from "../../components/UpdateCategoryModal";
 import { useCategoryContext } from "../../context/CategoryContext";
+import moment from "moment";
+import { getSession } from "next-auth/react";
 
-export const getServerSideProps = async () => {
-  const response = await axios.get("http://localhost:4000/api/categories");
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
+  console.log(session);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${session.user.accessToken}`,
+    },
+  };
+
+  const response = await axios.get(
+    "http://localhost:4000/api/categories",
+    config
+  );
 
   const data = response.data;
 
@@ -51,6 +66,12 @@ const Categories = ({ categories }) => {
       title: "Description",
       dataIndex: "description",
       key: "description",
+    },
+    {
+      title: "Date",
+      dataIndex: "createdAt",
+      key: "createdDate",
+      render: (date) => moment(date).format("DD/MM/YYYY"),
     },
     {
       title: "Action",

@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "antd/dist/antd.css";
+import "react-perfect-scrollbar/dist/css/styles.css";
 import UsersProvider from "../context/UserContext";
 import MainLayout from "../layouts/MainLayout";
 import React from "react";
@@ -7,6 +8,8 @@ import NextNProgress from "nextjs-progressbar";
 import AccountLayout from "../layouts/Account";
 import CategoriesProvider from "../context/CategoryContext";
 import { SessionProvider, useSession, signIn } from "next-auth/react";
+import { Spin } from "antd";
+import ProductProvider from "../context/ProductContext";
 
 const layouts = {
   L1: MainLayout,
@@ -20,23 +23,29 @@ function MyApp({ session, Component, pageProps }) {
     <SessionProvider session={session}>
       {Component.auth ? (
         <Auth>
-          <UsersProvider>
-            <CategoriesProvider>
-              <NextNProgress />
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </CategoriesProvider>
-          </UsersProvider>
+          <SessionProvider session={session}>
+            <UsersProvider>
+              <CategoriesProvider>
+                <ProductProvider>
+                  <NextNProgress />
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ProductProvider>
+              </CategoriesProvider>
+            </UsersProvider>
+          </SessionProvider>
         </Auth>
       ) : (
         <>
           <UsersProvider>
             <CategoriesProvider>
-              <NextNProgress />
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
+              <ProductProvider>
+                <NextNProgress />
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </ProductProvider>
             </CategoriesProvider>
           </UsersProvider>
         </>
@@ -61,5 +70,9 @@ function Auth({ children }) {
 
   // Session is being fetched, or no user.
   // If no user, useEffect() will redirect.
-  return <div>Loading...</div>;
+  return (
+    <div className="h-screen flex flex-col items-center text-4xl justify-center">
+      <Spin size="large" />
+    </div>
+  );
 }

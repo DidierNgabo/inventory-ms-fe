@@ -9,3 +9,7 @@
 .topIconBadge {
   @apply absolute h-3 w-3 rounded-full bg-red-500 top-4 left-5 font-semibold;
 }
+
+.form-input {
+  @apply h-12 w-3/4 rounded-md bg-red-50;
+}

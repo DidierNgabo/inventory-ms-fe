@@ -22,6 +22,8 @@ const CustomTable = ({ data, columns, addNewLink }) => {
       <Table
         dataSource={data}
         columns={columns}
+        size="small"
+        rowKey="id"
         pagination={{
           defaultPageSize: 5,
           showSizeChanger: true,
