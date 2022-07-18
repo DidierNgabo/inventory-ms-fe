@@ -4,16 +4,16 @@ import { signIn, getCsrfToken } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 
-const Login = () => {
+const Login = ({ csrfToken }) => {
   const [form] = useForm();
   const [error, setError] = React.useState(null);
   const router = useRouter();
 
-  // if (csrfToken) {
-  //   form.setFieldsValue({
-  //     csrfToken: csrfToken,
-  //   });
-  // }
+  if (csrfToken) {
+    form.setFieldsValue({
+      csrfToken: csrfToken,
+    });
+  }
 
   const onFinish = async (values) => {
     try {
@@ -26,8 +26,10 @@ const Login = () => {
 
       if (res?.error) {
         setError(res.error);
+        message.error("bad credentials", 2);
       } else {
         setError(null);
+        message.success("logged in sucessfully", 2);
       }
       if (res.url) router.push(res.url);
     } catch (error) {
@@ -56,9 +58,9 @@ const Login = () => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        {/* <Form.Item label="Token" name="csrfToken">
+        <Form.Item label="Token" name="csrfToken">
           <Input hidden />
-        </Form.Item> */}
+        </Form.Item>
 
         <Form.Item
           label="Email"

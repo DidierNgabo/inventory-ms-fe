@@ -25,46 +25,48 @@ export default function CardLineChart() {
 
   return (
     <>
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-[#334155]">
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-[#021529]">
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blue-800 mb-1 text-xs font-semibold">
+              <h6 className="uppercase text-[#2291FF] mb-1 text-xs font-semibold">
                 Overview
               </h6>
-              <h2 className="text-white text-xl font-semibold">Sales value</h2>
+              <h2 className="text-white text-xl font-semibold">
+                Online Requests
+              </h2>
             </div>
           </div>
         </div>
-        <div className="p-4 flex-auto">
+        <div className="p-3 flex-auto">
           {/* Chart */}
           <div className="relative">
             <Line
               datasetIdKey="id"
               data={{
                 labels: [
-                  "January",
-                  "February",
-                  "March",
-                  "April",
-                  "May",
-                  "June",
-                  "July",
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday",
                 ],
                 datasets: [
                   {
-                    label: new Date().getFullYear(),
-                    backgroundColor: "#4c51bf",
-                    borderColor: "#4c51bf",
-                    data: [65, 78, 66, 44, 56, 67, 75],
+                    label: "this week",
+                    backgroundColor: "#2291FF",
+                    borderColor: "#2291FF",
+                    data: [5, 10, 13, 20, 15, 19, 21],
                     fill: false,
                   },
                   {
-                    label: new Date().getFullYear() - 1,
+                    label: "last week",
                     fill: false,
                     backgroundColor: "#fff",
                     borderColor: "#fff",
-                    data: [40, 68, 86, 74, 56, 60, 87],
+                    data: [23, 12, 32, 15, 32, 54, 2],
                   },
                 ],
                 options: {
@@ -99,7 +101,7 @@ export default function CardLineChart() {
                         display: true,
                         scaleLabel: {
                           display: false,
-                          labelString: "Month",
+                          labelString: "Week",
                           fontColor: "white",
                         },
                         gridLines: {

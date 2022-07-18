@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import "antd/dist/antd.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
+import "@ant-design/pro-components/dist/components.css";
 import UsersProvider from "../context/UserContext";
 import MainLayout from "../layouts/MainLayout";
 import React from "react";
@@ -10,6 +11,9 @@ import CategoriesProvider from "../context/CategoryContext";
 import { SessionProvider, useSession, signIn } from "next-auth/react";
 import { Spin } from "antd";
 import ProductProvider from "../context/ProductContext";
+import QuotationProvider from "../context/QuotationContext";
+import OrderProvider from "../context/OrderContext";
+import TransactionProvider from "../context/TransactionContext";
 
 const layouts = {
   L1: MainLayout,
@@ -25,14 +29,20 @@ function MyApp({ session, Component, pageProps }) {
         <Auth>
           <SessionProvider session={session}>
             <UsersProvider>
-              <CategoriesProvider>
-                <ProductProvider>
-                  <NextNProgress />
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                </ProductProvider>
-              </CategoriesProvider>
+              <TransactionProvider>
+                <CategoriesProvider>
+                  <ProductProvider>
+                    <OrderProvider>
+                      <QuotationProvider>
+                        <NextNProgress />
+                        <Layout>
+                          <Component {...pageProps} />
+                        </Layout>
+                      </QuotationProvider>
+                    </OrderProvider>
+                  </ProductProvider>
+                </CategoriesProvider>
+              </TransactionProvider>
             </UsersProvider>
           </SessionProvider>
         </Auth>

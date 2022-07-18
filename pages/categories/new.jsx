@@ -26,7 +26,7 @@ const newCategory = () => {
   };
 
   return (
-    <div className="w-1/3 mx-auto">
+    <div className="form-card">
       <h2 className="text-center mb-10 mt-3 text-xl font-semibold">
         Add new Category
       </h2>

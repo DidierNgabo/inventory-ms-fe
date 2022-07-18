@@ -1,9 +1,17 @@
 import React from "react";
+import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async (context) => {
   const { id } = context.params;
 
-  const res = await fetch(`http://localhost:4000/api/categories/${id}`);
+  const session = await getSession(context);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${session.user.accessToken}`,
+    },
+  };
+  const res = await fetch(`http://localhost:4000/api/categories/${id}`, config);
   const data = await res.json();
 
   return {

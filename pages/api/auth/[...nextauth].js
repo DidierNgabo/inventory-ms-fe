@@ -46,6 +46,7 @@ export default NextAuth({
         return {
           ...token,
           accessToken: user.token,
+          data: user.user,
         };
       }
 

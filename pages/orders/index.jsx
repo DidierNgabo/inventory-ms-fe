@@ -1,13 +1,11 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, message, Popconfirm, Spin } from "antd";
-import axios from "axios";
-import moment from "moment";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
-import CustomTable from "../../components/CustomTable";
-
 import { getSession } from "next-auth/react";
+import axios from "axios";
+import CustomTable from "../../components/CustomTable";
+import { Button, Popconfirm, Spin } from "antd";
+import Link from "next/link";
+import moment from "moment";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -18,21 +16,17 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 
-  const response = await axios.get(
-    "http://localhost:4000/api/quotations",
-    config
-  );
+  const response = await axios.get("http://localhost:4000/api/orders", config);
 
   return {
     props: {
-      quotations: response.data,
+      orders: response.data,
     },
   };
 };
 
-const Quotations = ({ quotations }) => {
-  const router = useRouter();
-  const [data, setData] = React.useState(quotations);
+const Orders = ({ orders }) => {
+  const [data, setData] = React.useState(orders);
 
   const confirm = async (id) => {
     try {
@@ -50,9 +44,9 @@ const Quotations = ({ quotations }) => {
 
   const columns = [
     {
-      title: "Quotation number",
-      dataIndex: "quotationNumber",
-      key: "quotationNo",
+      title: "Order No",
+      dataIndex: "orderNumber",
+      key: "orderNo",
     },
     {
       title: "customer",
@@ -76,17 +70,17 @@ const Quotations = ({ quotations }) => {
       key: "action",
       width: 200,
       fixed: "right",
-      render: (_, record) => (
+      render: (text, record) => (
         <div className="w-4/5 flex items-start justify-between">
-          <Link href={`/quotations/edit/${record.id}`}>
+          <Link href={`/orders/edit/${record.id}`}>
             <Button type="ghost" icon={<EditOutlined />} />
           </Link>
 
-          <Link href={`/quotations/${record.id}`}>
+          <Link href={`/orders/${record.id}`}>
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
           <Popconfirm
-            title="Are you sure to delete this quotation?"
+            title="Are you sure to delete this Order?"
             onConfirm={() => confirm(record.id)}
             okText="Yes"
             cancelText="No"
@@ -97,27 +91,22 @@ const Quotations = ({ quotations }) => {
       ),
     },
   ];
-
   return (
-    <>
-      {quotations?.length !== 0 && (
-        <CustomTable
-          data={data}
-          columns={columns}
-          addNewLink="/quotations/new"
-        />
+    <div>
+      {orders?.length !== 0 && (
+        <CustomTable data={data} columns={columns} addNewLink="/orders/new" />
       )}
 
-      {quotations?.length == 0 && (
+      {orders?.length == 0 && (
         <div className="h-full flex items-center text-2xl justify-center">
           <Spin size="large" />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
-export default Quotations;
+Orders.layout = "L1";
+Orders.auth = true;
 
-Quotations.layout = "L1";
-Quotations.auth = true;
+export default Orders;

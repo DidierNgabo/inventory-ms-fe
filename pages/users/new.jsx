@@ -31,7 +31,7 @@ const newUser = () => {
   };
 
   return (
-    <div className="w-3/5 mx-auto">
+    <div className="form-card">
       <h2 className="text-center mb-10 mt-3 text-xl font-semibold">
         Add new User
       </h2>

@@ -32,7 +32,7 @@ const SmallWidget = ({
                   statIconColor
                 }
               >
-                <i className={statIconName}></i>
+                {statIconName}
               </div>
             </div>
           </div>

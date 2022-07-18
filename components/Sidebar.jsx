@@ -48,19 +48,23 @@ export default function Sidebar() {
       children: [
         { label: <Link href="/categories/">Categories</Link>, key: "category" },
         { label: <Link href="/products/">Products</Link>, key: "products" },
+        {
+          label: <Link href="/transactions/">Transactions</Link>,
+          key: "transactions",
+        },
       ],
     },
-    {
-      key: "stock",
-      label: "Stock Control",
-      icon: <ShopOutlined />,
-      children: [
-        { label: "Orders", key: "orders" },
-        { label: "Stock Issuance", key: "stock issuance" },
-        { label: "Stock Adjustment", key: "stock adjustment" },
-        { label: "Stock Return", key: "stock return" },
-      ],
-    },
+    // {
+    //   key: "stock",
+    //   label: "Stock Control",
+    //   icon: <ShopOutlined />,
+    //   children: [
+    //     { label: <Link href="/orders/">Orders</Link>, key: "orders" },
+    //     { label: "Stock Issuance", key: "stock issuance" },
+    //     { label: "Stock Adjustment", key: "stock adjustment" },
+    //     { label: "Stock Return", key: "stock return" },
+    //   ],
+    // },
     {
       key: "operations",
       label: "Operations",

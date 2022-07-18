@@ -33,6 +33,6 @@ const UsersProvider = ({ children }) => {
 
 export default UsersProvider;
 
-export const useUsers = () => {
+export const useUserContext = () => {
   return React.useContext(UsersContext);
 };

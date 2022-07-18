@@ -1,13 +1,12 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, message, Popconfirm, Spin } from "antd";
+import { Button, message, Popconfirm, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
 import CustomTable from "../../components/CustomTable";
 
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
+import Link from "next/link";
+import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -19,25 +18,34 @@ export const getServerSideProps = async (ctx) => {
   };
 
   const response = await axios.get(
-    "http://localhost:4000/api/quotations",
+    "http://localhost:4000/api/transactions",
     config
   );
 
   return {
     props: {
-      quotations: response.data,
+      transactions: response.data,
     },
   };
 };
 
-const Quotations = ({ quotations }) => {
-  const router = useRouter();
-  const [data, setData] = React.useState(quotations);
+const Transactions = ({ transactions }) => {
+  const [data, setData] = React.useState(transactions);
+
+  const { data: session } = useSession();
+
+  const token = session?.user?.accessToken;
 
   const confirm = async (id) => {
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const response = await axios.delete(
-        `http://localhost:4000/api/quotations/${id}`
+        `http://localhost:4000/api/transactions/${id}`,
+        config
       );
       if (response) {
         message.success(response.data.message);
@@ -47,22 +55,36 @@ const Quotations = ({ quotations }) => {
       message.error(error.message);
     }
   };
-
   const columns = [
     {
-      title: "Quotation number",
-      dataIndex: "quotationNumber",
+      title: "Transaction No",
+      dataIndex: "transactionNo",
       key: "quotationNo",
     },
     {
-      title: "customer",
-      dataIndex: "customer",
-      key: "customer",
+      title: "Product",
+      dataIndex: "product",
+      key: "product",
+      render: (_, record) => (
+        <Link href={`/products/${record.product.id}`}>
+          <Typography.Link>{record.product.name}</Typography.Link>
+        </Link>
+      ),
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
     },
     {
       title: "status",
       dataIndex: "status",
       key: "status",
+    },
+    {
+      title: "quantity",
+      dataIndex: "quantity",
+      key: "quantity",
     },
     {
       title: "Date",
@@ -78,15 +100,15 @@ const Quotations = ({ quotations }) => {
       fixed: "right",
       render: (_, record) => (
         <div className="w-4/5 flex items-start justify-between">
-          <Link href={`/quotations/edit/${record.id}`}>
+          <Link href={`/transactions/edit/${record.id}`}>
             <Button type="ghost" icon={<EditOutlined />} />
           </Link>
 
-          <Link href={`/quotations/${record.id}`}>
+          <Link href={`/transactions/${record.id}`}>
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
           <Popconfirm
-            title="Are you sure to delete this quotation?"
+            title="Are you sure to delete this transaction?"
             onConfirm={() => confirm(record.id)}
             okText="Yes"
             cancelText="No"
@@ -97,27 +119,18 @@ const Quotations = ({ quotations }) => {
       ),
     },
   ];
-
   return (
-    <>
-      {quotations?.length !== 0 && (
-        <CustomTable
-          data={data}
-          columns={columns}
-          addNewLink="/quotations/new"
-        />
-      )}
-
-      {quotations?.length == 0 && (
-        <div className="h-full flex items-center text-2xl justify-center">
-          <Spin size="large" />
-        </div>
-      )}
-    </>
+    <div>
+      <CustomTable
+        columns={columns}
+        data={data}
+        addNewLink="/transactions/new"
+      />
+    </div>
   );
 };
 
-export default Quotations;
+Transactions.layout = "L1";
+Transactions.auth = true;
 
-Quotations.layout = "L1";
-Quotations.auth = true;
+export default Transactions;

@@ -4,9 +4,21 @@ import axios from "axios";
 import React from "react";
 import ActionMenu from "../../components/ActionMenu";
 import CustomTable from "../../components/CustomTable";
+import { getSession } from "next-auth/react";
 
 export const getServerSideProps = async (ctx) => {
-  const response = await axios.get("http://localhost:4000/api/products");
+  const session = await getSession(ctx);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${session.user.accessToken}`,
+    },
+  };
+
+  const response = await axios.get(
+    "http://localhost:4000/api/products",
+    config
+  );
 
   return {
     props: {

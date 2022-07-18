@@ -13,3 +13,6 @@
 .form-input {
   @apply h-12 w-3/4 rounded-md bg-red-50;
 }
+.form-card {
+  @apply w-4/5 bg-white shadow-md p-6 mx-auto;
+}

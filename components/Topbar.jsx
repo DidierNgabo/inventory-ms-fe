@@ -60,7 +60,16 @@ const menu = (
   />
 );
 
-export default function Topbar({ user }) {
+export default function Topbar() {
+  const { data: session } = useSession();
+  const token = session?.user?.accessToken;
+
+  let user = null;
+
+  if (token) {
+    user = jwt(token);
+  }
+  console.log(user);
   return (
     <Header
       style={{
@@ -98,7 +107,7 @@ export default function Topbar({ user }) {
                   size="large"
                   gap={4}
                 >
-                  {user && user.chart(0).toUpperCase()}
+                  {user && user.email.charAt(0).toUpperCase()}
                 </Avatar>
               </Dropdown>
             </div>
