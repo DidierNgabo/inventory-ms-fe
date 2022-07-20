@@ -27,11 +27,11 @@ export default function Sidebar() {
       label: <Link href="/">Dashboard</Link>,
       icon: <Dashboard />,
     },
-    {
-      key: "analytics",
-      label: "Analytics",
-      icon: <AreaChartOutlined />,
-    },
+    // {
+    //   key: "analytics",
+    //   label: "Analytics",
+    //   icon: <AreaChartOutlined />,
+    // },
     {
       key: "users",
       label: <Link href="/users/">Users</Link>,
@@ -73,6 +73,10 @@ export default function Sidebar() {
         {
           label: <Link href="/requests/">Online Requests</Link>,
           key: "requests",
+        },
+        {
+          label: <Link href="/inspections/">Inspections</Link>,
+          key: "inspections",
         },
       ],
     },
