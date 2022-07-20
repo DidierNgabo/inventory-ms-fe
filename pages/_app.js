@@ -14,6 +14,7 @@ import ProductProvider from "../context/ProductContext";
 import QuotationProvider from "../context/QuotationContext";
 import OrderProvider from "../context/OrderContext";
 import TransactionProvider from "../context/TransactionContext";
+import RequestProvider from "../context/RequestContext";
 
 const layouts = {
   L1: MainLayout,
@@ -34,10 +35,12 @@ function MyApp({ session, Component, pageProps }) {
                   <ProductProvider>
                     <OrderProvider>
                       <QuotationProvider>
-                        <NextNProgress />
-                        <Layout>
-                          <Component {...pageProps} />
-                        </Layout>
+                        <RequestProvider>
+                          <NextNProgress />
+                          <Layout>
+                            <Component {...pageProps} />
+                          </Layout>
+                        </RequestProvider>
                       </QuotationProvider>
                     </OrderProvider>
                   </ProductProvider>

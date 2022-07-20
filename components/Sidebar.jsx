@@ -4,6 +4,7 @@ import {
   UploadOutlined,
   ShopOutlined,
   FileDoneOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { Dashboard } from "@material-ui/icons";
 import Image from "next/image";
@@ -44,7 +45,7 @@ export default function Sidebar() {
     {
       key: "inventory",
       label: "Inventory",
-      icon: <TeamOutlined />,
+      icon: <ShopOutlined />,
       children: [
         { label: <Link href="/categories/">Categories</Link>, key: "category" },
         { label: <Link href="/products/">Products</Link>, key: "products" },
@@ -74,6 +75,25 @@ export default function Sidebar() {
           label: <Link href="/quotations/">Quotations</Link>,
           key: "quotations",
         },
+        {
+          label: <Link href="/requests/">Online Requests</Link>,
+          key: "requests",
+        },
+      ],
+    },
+    {
+      key: "settings",
+      label: "Settings",
+      icon: <SettingOutlined />,
+      children: [
+        {
+          label: <Link href="/roles/">Roles</Link>,
+          key: "roles",
+        },
+        // {
+        //   label: <Link href="/requests/">Online Requests</Link>,
+        //   key: "requests",
+        // },
       ],
     },
   ];

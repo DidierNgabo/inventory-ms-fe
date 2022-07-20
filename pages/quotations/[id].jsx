@@ -2,7 +2,9 @@ import React from "react";
 
 import { getSession } from "next-auth/react";
 import axios from "axios";
-import { Descriptions, Skeleton } from "antd";
+import { Button, Descriptions, Skeleton } from "antd";
+
+import { useFlutterwave, closePaymentModal } from "flutterwave-react-v3";
 
 export const getServerSideProps = async (ctx) => {
   const { id } = ctx.params;
@@ -25,8 +27,45 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const QuotationInfo = ({ quotationDetails }) => {
+  console.log(process.env.NEXT_PUBLIC_FLUTTER_API_KEY);
+  const config = {
+    public_key: process.env.NEXT_PUBLIC_FLUTTER_API_KEY,
+    tx_ref: Date.now(),
+    amount: 100,
+    currency: "RWF",
+    payment_options: "mobilemoney",
+    customer: {
+      email: "diddynu2000@gmail.com",
+      phonenumber: "250787524967",
+      name: "quizera eric",
+    },
+    customizations: {
+      title: "Anik System",
+      description: "Payment for the given quotation",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQuSfeVjT2F9g-pnY-W4Wjul5WRVNFLayjl0X739Pxuf3t1JYGZry2hdvWM-jXRv1HDtM&usqp=CAU",
+    },
+  };
+
+  const handleFlutterPayment = useFlutterwave(config);
+
   return (
     <div className="form-card">
+      <div>
+        <Button
+          type="primary"
+          onClick={() => {
+            handleFlutterPayment({
+              callback: (response) => {
+                console.log(response);
+                closePaymentModal(); // this will close the modal programmatically
+              },
+              onClose: () => {},
+            });
+          }}
+        >
+          Pay QUOTATION
+        </Button>
+      </div>
       {quotationDetails.length > 0 && (
         <div>
           <div className="flex w-4/5 justify-between items-center">
