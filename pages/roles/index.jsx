@@ -5,6 +5,7 @@ import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import CustomTable from "../../components/CustomTable";
+import { useRole } from "../../context/RoleContext";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -27,6 +28,8 @@ const Roles = ({ roles }) => {
   const [data, setData] = React.useState(roles);
 
   const { data: session } = useSession();
+
+  const { deleteRole } = useRole();
 
   const token = session?.user?.accessToken;
 
@@ -76,7 +79,7 @@ const Roles = ({ roles }) => {
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
           <Popconfirm
-            title="Are you sure to delete this transaction?"
+            title="Are you sure to delete this role?"
             onConfirm={() => confirm(record.id)}
             okText="Yes"
             cancelText="No"

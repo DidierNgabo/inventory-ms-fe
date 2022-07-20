@@ -33,11 +33,6 @@ export default function Sidebar() {
       icon: <AreaChartOutlined />,
     },
     {
-      key: "sales",
-      label: "Sales",
-      icon: <UploadOutlined />,
-    },
-    {
       key: "users",
       label: <Link href="/users/">Users</Link>,
       icon: <TeamOutlined />,
