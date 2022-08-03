@@ -1,7 +1,5 @@
 import {
   TeamOutlined,
-  AreaChartOutlined,
-  UploadOutlined,
   ShopOutlined,
   FileDoneOutlined,
   SettingOutlined,
@@ -14,24 +12,31 @@ import { Layout, Menu } from "antd";
 import Link from "next/link";
 import { useState } from "react";
 
+import { useSession } from "next-auth/react";
+import jwtDecode from "jwt-decode";
+
 export default function Sidebar() {
+  const { data: session } = useSession();
+  const token = session?.user?.accessToken;
   const [collapsed, setCollapsed] = useState(false);
+
+  let user = null;
+
+  if (token) {
+    user = jwtDecode(token);
+  }
+
   const onCollapse = () => {
     setCollapsed(!collapsed);
   };
   const { Sider } = Layout;
 
-  const menuItems = [
+  const menuItemsAdmin = [
     {
       key: "dashboard",
       label: <Link href="/">Dashboard</Link>,
       icon: <Dashboard />,
     },
-    // {
-    //   key: "analytics",
-    //   label: "Analytics",
-    //   icon: <AreaChartOutlined />,
-    // },
     {
       key: "users",
       label: <Link href="/users/">Users</Link>,
@@ -50,17 +55,6 @@ export default function Sidebar() {
         },
       ],
     },
-    // {
-    //   key: "stock",
-    //   label: "Stock Control",
-    //   icon: <ShopOutlined />,
-    //   children: [
-    //     { label: <Link href="/orders/">Orders</Link>, key: "orders" },
-    //     { label: "Stock Issuance", key: "stock issuance" },
-    //     { label: "Stock Adjustment", key: "stock adjustment" },
-    //     { label: "Stock Return", key: "stock return" },
-    //   ],
-    // },
     {
       key: "operations",
       label: "Operations",
@@ -89,11 +83,66 @@ export default function Sidebar() {
           label: <Link href="/roles/">Roles</Link>,
           key: "roles",
         },
-        // {
-        //   label: <Link href="/requests/">Online Requests</Link>,
-        //   key: "requests",
-        // },
       ],
+    },
+  ];
+
+  const menuItemsAccountant = [
+    {
+      key: "dashboard",
+      label: <Link href="/">Dashboard</Link>,
+      icon: <Dashboard />,
+    },
+    {
+      key: "operations",
+      label: "Operations",
+      icon: <FileDoneOutlined />,
+      children: [
+        {
+          label: <Link href="/quotations/">Quotations</Link>,
+          key: "quotations",
+        },
+        {
+          label: <Link href="/requests/">Online Requests</Link>,
+          key: "requests",
+        },
+      ],
+    },
+  ];
+
+  const menuItemsTechnician = [
+    {
+      key: "dashboard",
+      label: <Link href="/">Dashboard</Link>,
+      icon: <Dashboard />,
+    },
+    {
+      key: "operations",
+      label: "Operations",
+      icon: <FileDoneOutlined />,
+      children: [
+        {
+          label: <Link href="/requests/">Online Requests</Link>,
+          key: "requests",
+        },
+        {
+          label: <Link href="/inspections/">Inspections</Link>,
+          key: "inspections",
+        },
+      ],
+    },
+  ];
+
+  const menuItemsCustomer = [
+    {
+      key: "dashboard",
+      label: <Link href="/">Dashboard</Link>,
+      icon: <Dashboard />,
+    },
+    {
+      label: <Link href="/requests/">Online Requests</Link>,
+      key: "requests",
+      icon: <Dashboard />,
     },
   ];
 
@@ -119,7 +168,17 @@ export default function Sidebar() {
           style={{ marginTop: "10px" }}
           mode="inline"
           theme="dark"
-          items={menuItems}
+          items={
+            !user
+              ? menuItemsAdmin
+              : user.role.name === "admin"
+              ? menuItemsAdmin
+              : user.role.name === "accountant"
+              ? menuItemsAccountant
+              : user.role.name === "technician"
+              ? menuItemsTechnician
+              : menuItemsCustomer
+          }
           defaultSelectedKeys={["dashboard"]}
         ></Menu>
       </Sider>

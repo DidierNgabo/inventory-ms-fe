@@ -124,6 +124,7 @@ const Transactions = ({ transactions }) => {
       <CustomTable
         columns={columns}
         data={data}
+        param="transactionNo"
         addNewLink="/transactions/new"
       />
     </div>

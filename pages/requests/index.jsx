@@ -1,11 +1,12 @@
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { Button, message, Popconfirm, Typography } from "antd";
+import { Button, message, Popconfirm, Tag, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
 import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import CustomTable from "../../components/CustomTable";
+import RequestMap from "../../components/RequestMap";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -58,11 +59,15 @@ const Requests = ({ requests }) => {
       title: "ReqNo",
       dataIndex: "reqNo",
       key: "reqNo",
+      sorter: (a, b) => a.reqNo.localeCompare(b.reqNo),
+      sortDirections: ["descend"],
     },
     {
       title: "Customer",
       dataIndex: "customer",
       key: "customer",
+      sorter: (a, b) => a.customer.name.localeCompare(b.customer.name),
+      sortDirections: ["descend"],
       render: (_, record) => (
         <Link href={`/users/${record.customer.id}`}>
           <Typography.Link>{record.customer.name}</Typography.Link>
@@ -84,6 +89,16 @@ const Requests = ({ requests }) => {
       dataIndex: "description",
       key: "description",
     },
+    // {
+    //   title: "Assigned To",
+    //   dataIndex: "assignedTo",
+    //   key: "assignedTo",
+    //   render: (_, record) => (
+    //     <Link href={`/users/${record.assignedTo.id}`}>
+    //       <Typography.Link>{record.assignedTo.name}</Typography.Link>
+    //     </Link>
+    //   ),
+    // },
     {
       title: "Date",
       dataIndex: "createdAt",
@@ -119,7 +134,13 @@ const Requests = ({ requests }) => {
   ];
   return (
     <div>
-      <CustomTable columns={columns} data={data} addNewLink="/requests/new" />
+      <CustomTable
+        columns={columns}
+        data={data}
+        param="reqNo"
+        addNewLink="/requests/new"
+      />
+      {/* <RequestMap /> */}
     </div>
   );
 };

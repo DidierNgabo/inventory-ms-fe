@@ -5,12 +5,12 @@ import Link from "next/link";
 import { PlusOutlined } from "@ant-design/icons";
 import SearchInput from "./Search";
 
-const CustomTable = ({ data, columns, addNewLink }) => {
+const CustomTable = ({ data, columns, addNewLink, param }) => {
   return (
     <div>
       <div className="w-full flex items-center justify-between mt-12 mb-8">
         <div className="w-1/3">
-          <SearchInput data={data} />
+          <SearchInput data={data} param={param} />
         </div>
 
         <Link href={addNewLink}>

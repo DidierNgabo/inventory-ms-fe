@@ -2,14 +2,17 @@ import { SearchOutlined } from "@ant-design/icons";
 import { AutoComplete, Input } from "antd";
 import React from "react";
 
-const SearchInput = ({ data }) => {
+const SearchInput = ({ data, param }) => {
   const [options, setOptions] = React.useState([]);
 
   const searchResult = (query) => {
-    const filteredData = data.filter(({ name }) =>
-      name.toLowerCase().includes(query.toLowerCase())
+    const filteredData = data.filter((record) =>
+      record[param].toLowerCase().includes(query.toLowerCase())
     );
-    return filteredData.map(({ name }) => ({ value: name, label: name }));
+    return filteredData.map((record) => ({
+      value: record[param],
+      label: record[param],
+    }));
   };
 
   const handleSearch = (value) => {

@@ -85,6 +85,9 @@ const Quotations = ({ quotations }) => {
           <Link href={`/quotations/${record.id}`}>
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
+          {/* <Link href={`/quotations/${record.id}`}>
+            <Button type="ghost" icon={<Pdf />} />
+          </Link> */}
           <Popconfirm
             title="Are you sure to delete this quotation?"
             onConfirm={() => confirm(record.id)}

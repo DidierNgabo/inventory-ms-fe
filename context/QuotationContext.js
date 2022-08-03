@@ -15,10 +15,6 @@ const QuotationProvider = ({ children }) => {
   const [isNew, setIsNew] = React.useState(false);
   const [editingDetail, setEditingDetail] = React.useState(null);
 
-  // const { data, error, isLoaded } = useApiRequest(
-  //   "http://localhost:4000/api/quotations"
-  // );
-
   const deleteDetail = (record) => {
     setData((pre) => {
       return pre.filter((detail) => detail.productName !== record.productName);
@@ -113,7 +109,6 @@ const QuotationProvider = ({ children }) => {
         details,
       };
 
-      console.log(values);
       const response = await axios.post(
         "http://localhost:4000/api/quotation-details/full",
         values

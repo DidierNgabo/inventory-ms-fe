@@ -11,65 +11,52 @@ import {
   SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const { Header } = Layout;
 
-export const getServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);
-
-  const user = jwt(session?.user.accessToken);
-
-  console.log(session);
-  console.log(user);
-
-  return {
-    props: {
-      user,
-    },
-  };
-};
-
-const handleSignOut = () => {
-  signOut();
-};
-
-const menu = (
-  <Menu
-    className=""
-    items={[
-      {
-        label: <a href="https://www.antgroup.com">Profile</a>,
-        key: "0",
-        icon: <UserOutlined />,
-      },
-      {
-        label: <a href="https://www.aliyun.com">Settings</a>,
-        key: "1",
-        icon: <SettingOutlined />,
-      },
-      {
-        type: "divider",
-      },
-      {
-        label: "Logout",
-        key: "3",
-        onClick: () => handleSignOut(),
-        icon: <LogoutOutlined />,
-      },
-    ]}
-  />
-);
-
 export default function Topbar() {
   const { data: session } = useSession();
+  const router = useRouter();
   const token = session?.user?.accessToken;
+
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "/login" });
+    // router.push("/login");
+  };
+
+  const menu = (
+    <Menu
+      className=""
+      items={[
+        {
+          label: "Profile",
+          key: "0",
+          icon: <UserOutlined />,
+        },
+        {
+          label: <a href="https://www.aliyun.com">Settings</a>,
+          key: "1",
+          icon: <SettingOutlined />,
+        },
+        {
+          type: "divider",
+        },
+        {
+          label: "Logout",
+          key: "3",
+          onClick: () => handleSignOut(),
+          icon: <LogoutOutlined />,
+        },
+      ]}
+    />
+  );
 
   let user = null;
 
   if (token) {
     user = jwt(token);
   }
-  console.log(user);
   return (
     <Header
       style={{

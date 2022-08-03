@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Button, message, Popconfirm, Spin, Table, Tag } from "antd";
+import { Button, message, Popconfirm, Spin, Tag, Typography } from "antd";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import CustomTable from "../../components/CustomTable";
@@ -31,6 +31,16 @@ const Users = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      render: (_, record) => (
+        <Link href={`/roles/${record.role.id}`}>
+          <Typography.Link>{record.role.name}</Typography.Link>
+        </Link>
+      ),
     },
     {
       title: "Active",
@@ -72,7 +82,12 @@ const Users = () => {
   return (
     <>
       {isLoaded && (
-        <CustomTable data={data} columns={columns} addNewLink="/users/new" />
+        <CustomTable
+          data={data}
+          columns={columns}
+          param="name"
+          addNewLink="/users/new"
+        />
       )}
       {!isLoaded && (
         <div className="h-full flex items-center text-2xl justify-center">

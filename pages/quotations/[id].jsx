@@ -27,11 +27,16 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const QuotationInfo = ({ quotationDetails }) => {
-  console.log(process.env.NEXT_PUBLIC_FLUTTER_API_KEY);
+  const total = quotationDetails.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.quantity * currentValue.unityCost;
+  }, 0);
+
+  const maxTotal = total + total * 0.18;
+
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTER_API_KEY,
     tx_ref: Date.now(),
-    amount: 100,
+    amount: maxTotal,
     currency: "RWF",
     payment_options: "mobilemoney",
     customer: {
@@ -48,21 +53,29 @@ const QuotationInfo = ({ quotationDetails }) => {
 
   const handleFlutterPayment = useFlutterwave(config);
 
+  const handleClick = () => {
+    const response = axios.put(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/quotations/${quotationDetails[0].quotation.id}`,
+      {
+        status: "accepted",
+      }
+    );
+
+    if (response) {
+      handleFlutterPayment({
+        callback: (response) => {
+          console.log(response);
+          closePaymentModal(); // this will close the modal programmatically
+        },
+        onClose: () => {},
+      });
+    }
+  };
+
   return (
     <div className="form-card">
       <div>
-        <Button
-          type="primary"
-          onClick={() => {
-            handleFlutterPayment({
-              callback: (response) => {
-                console.log(response);
-                closePaymentModal(); // this will close the modal programmatically
-              },
-              onClose: () => {},
-            });
-          }}
-        >
+        <Button type="primary" onClick={handleClick}>
           Pay QUOTATION
         </Button>
       </div>
@@ -95,16 +108,24 @@ const QuotationInfo = ({ quotationDetails }) => {
             {quotationDetails.map((detail) => (
               <>
                 <Descriptions.Item>{detail.productName}</Descriptions.Item>
-                <Descriptions.Item>{detail.unityCost}</Descriptions.Item>
+                <Descriptions.Item>
+                  {detail.unityCost.toLocaleString()} Rwf
+                </Descriptions.Item>
                 <Descriptions.Item>{detail.quantity}</Descriptions.Item>
                 <Descriptions.Item>
-                  {detail.quantity * detail.unityCost}
+                  {(detail.quantity * detail.unityCost).toLocaleString()} Rwf
                 </Descriptions.Item>
               </>
             ))}
 
-            <Descriptions.Item span={4}>Total VAT</Descriptions.Item>
-            <Descriptions.Item span={4}>Total</Descriptions.Item>
+            <Descriptions.Item span={3}>Total VAT</Descriptions.Item>
+            <Descriptions.Item>
+              {(total * 0.18).toLocaleString()} Rwf
+            </Descriptions.Item>
+            <Descriptions.Item span={3}>Total</Descriptions.Item>
+            <Descriptions.Item>
+              {maxTotal.toLocaleString()} Rwf
+            </Descriptions.Item>
           </Descriptions>
         </div>
       )}

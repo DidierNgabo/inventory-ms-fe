@@ -1,6 +1,7 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { signIn, getCsrfToken } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
@@ -21,7 +22,7 @@ const Login = ({ csrfToken }) => {
         redirect: false,
         email: values.email,
         password: values.password,
-        callbackUrl: router.basePath,
+        callbackUrl: "/",
       });
 
       if (res?.error) {
@@ -58,8 +59,8 @@ const Login = ({ csrfToken }) => {
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <Form.Item label="Token" name="csrfToken">
-          <Input hidden />
+        <Form.Item hidden label="Token" name="csrfToken">
+          <Input />
         </Form.Item>
 
         <Form.Item
@@ -95,10 +96,14 @@ const Login = ({ csrfToken }) => {
           }}
         >
           <Button type="primary" htmlType="submit">
-            Submit
+            Login
           </Button>
         </Form.Item>
       </Form>
+
+      {/* <Typography.Link className="mt-8">
+        <Link href="/signup"> have no account signup please</Link>
+      </Typography.Link> */}
     </div>
   );
 };

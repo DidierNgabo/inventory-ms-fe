@@ -5,13 +5,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const CardPieChart = () => {
+const CardPieChart = ({ count }) => {
   const data = {
     labels: ["Rejected", "Approved", "Accepted"],
     datasets: [
       {
         label: "status of Quotations",
-        data: [5, 19, 14],
+        data: [count.rejected, count.approved, count.accepted],
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(54, 162, 235, 0.2)",

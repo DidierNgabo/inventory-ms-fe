@@ -85,6 +85,7 @@ export const Products = ({ products }) => {
       {products?.length !== 0 && (
         <CustomTable
           data={products}
+          param="name"
           columns={columns}
           addNewLink="/products/new"
         />

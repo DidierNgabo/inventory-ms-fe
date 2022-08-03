@@ -24,8 +24,18 @@ export const getServerSideProps = async (ctx) => {
     config
   );
 
+  const quotationsStatus = await axios.get(
+    "http://localhost:4000/api/quotations/status/count",
+    config
+  );
+
   const productsResponse = await axios.get(
     "http://localhost:4000/api/products/count",
+    config
+  );
+
+  const customersResponse = await axios.get(
+    "http://localhost:4000/api/users/role/customer",
     config
   );
 
@@ -33,12 +43,20 @@ export const getServerSideProps = async (ctx) => {
     props: {
       transactionsCount: transactionsResponse.data,
       quotationsCount: quotationsResponse.data,
+      quotationsStatusCount: quotationsStatus.data,
       productsCount: productsResponse.data,
+      customersCount: customersResponse.data,
     },
   };
 };
 
-const Home = ({ transactionsCount, quotationsCount, productsCount }) => {
+const Home = ({
+  transactionsCount,
+  quotationsCount,
+  productsCount,
+  customersCount,
+  quotationsStatusCount,
+}) => {
   return (
     <>
       <Head>
@@ -49,13 +67,14 @@ const Home = ({ transactionsCount, quotationsCount, productsCount }) => {
           transactionsCount={transactionsCount}
           quotationsCount={quotationsCount}
           productsCount={productsCount}
+          customersCount={customersCount}
         />
         <div className="w-full flex p-2 items-center justify-center">
           <div className="w-1/2 p-1">
             <CardLineChart />
           </div>
           <div className="w-1/2 p-1">
-            <CardPieChart />
+            <CardPieChart count={quotationsStatusCount} />
           </div>
         </div>
       </div>

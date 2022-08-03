@@ -1,25 +1,31 @@
-import { Button, Form, Input, message, Typography } from "antd";
 import React from "react";
-import { useForm } from "antd/lib/form/Form";
-import { useRouter } from "next/router";
+import Image from "next/image";
+import Confirm from "../public/images/confirmation-email.png";
+import { Button, Form, Input, message } from "antd";
 import axios from "axios";
-import Link from "next/link";
+import { useRouter } from "next/router";
 
-const Signup = () => {
-  const [form] = useForm();
+export const getServerSideProps = (ctx) => {
+  console.log(ctx.query);
+  const { token } = ctx.query;
+
+  return {
+    props: {
+      id: token,
+    },
+  };
+};
+
+const ResetPassword = ({ id }) => {
   const router = useRouter();
-
   const onFinish = async (values) => {
     try {
       const response = await axios.post(
-        "http://localhost:4000/auth/register/",
-        { ...values, role: "8" }
+        `http://localhost:4000/auth/reset/${id}`,
+        values
       );
       if (response) {
-        message.success(
-          "User created successfully,Please check your email to confirm"
-        );
-        form.resetFields();
+        message.success(response.data.message);
         router.push("/login");
       }
     } catch (error) {
@@ -30,6 +36,7 @@ const Signup = () => {
   const onFinishFailed = (errorInfo) => {
     message.error(errorInfo);
   };
+
   return (
     <div className="w-full flex items-center justify-center h-screen">
       <Form
@@ -39,22 +46,15 @@ const Signup = () => {
         autoComplete="off"
       >
         <Form.Item
-          rules={[{ required: true, message: "Please input your username" }]}
-          label="Name"
-          name="name"
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           hasFeedback
           rules={[
-            { type: "email", message: "Please enter a valid email" },
-            { required: true, message: "Please input your email" },
+            { required: "true", message: "Please input password" },
+            { min: 8, message: "Password can not be less than 8 characters" },
           ]}
-          label="Email"
-          name="email"
+          label="Password"
+          name="oldPassword"
         >
-          <Input />
+          <Input.Password />
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -63,20 +63,20 @@ const Signup = () => {
             { min: 8, message: "Password can not be less than 8 characters" },
           ]}
           label="Password"
-          name="password"
+          name="newPassword"
         >
           <Input.Password />
         </Form.Item>
         <Form.Item
           hasFeedback
-          dependencies={["password"]}
+          dependencies={["newPassword"]}
           label="Confirm Password"
           name="confirm"
           rules={[
             { required: true, message: "Please confirm password" },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
+                if (!value || getFieldValue("newPassword") === value) {
                   return Promise.resolve();
                 }
                 return Promise.reject(
@@ -90,18 +90,14 @@ const Signup = () => {
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Sign In
+            Submit
           </Button>
         </Form.Item>
       </Form>
-
-      {/* <Typography.Link>
-        <Link href="/login">Already have an account login please</Link>
-      </Typography.Link> */}
     </div>
   );
 };
 
-Signup.layout = "L2";
+ResetPassword.layout = "L2";
 
-export default Signup;
+export default ResetPassword;

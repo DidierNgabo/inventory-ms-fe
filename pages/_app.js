@@ -17,10 +17,12 @@ import TransactionProvider from "../context/TransactionContext";
 import RequestProvider from "../context/RequestContext";
 import RoleProvider from "../context/RoleContext";
 import InspectionProvider from "../context/InspectionContext";
+import ConfirmLayout from "../layouts/ConfirmLayout";
 
 const layouts = {
   L1: MainLayout,
   L2: AccountLayout,
+  L3: ConfirmLayout,
 };
 
 function MyApp({ session, Component, pageProps }) {
@@ -30,30 +32,28 @@ function MyApp({ session, Component, pageProps }) {
     <SessionProvider session={session}>
       {Component.auth ? (
         <Auth>
-          <SessionProvider session={session}>
-            <UsersProvider>
-              <RoleProvider>
-                <TransactionProvider>
-                  <CategoriesProvider>
-                    <ProductProvider>
-                      <OrderProvider>
-                        <InspectionProvider>
-                          <QuotationProvider>
-                            <RequestProvider>
-                              <NextNProgress />
-                              <Layout>
-                                <Component {...pageProps} />
-                              </Layout>
-                            </RequestProvider>
-                          </QuotationProvider>
-                        </InspectionProvider>
-                      </OrderProvider>
-                    </ProductProvider>
-                  </CategoriesProvider>
-                </TransactionProvider>
-              </RoleProvider>
-            </UsersProvider>
-          </SessionProvider>
+          <UsersProvider>
+            <RoleProvider>
+              <TransactionProvider>
+                <CategoriesProvider>
+                  <ProductProvider>
+                    <OrderProvider>
+                      <InspectionProvider>
+                        <QuotationProvider>
+                          <RequestProvider>
+                            <NextNProgress />
+                            <Layout>
+                              <Component {...pageProps} />
+                            </Layout>
+                          </RequestProvider>
+                        </QuotationProvider>
+                      </InspectionProvider>
+                    </OrderProvider>
+                  </ProductProvider>
+                </CategoriesProvider>
+              </TransactionProvider>
+            </RoleProvider>
+          </UsersProvider>
         </Auth>
       ) : (
         <>

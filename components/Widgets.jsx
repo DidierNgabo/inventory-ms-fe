@@ -2,7 +2,12 @@ import { BarChart, Payment, People, PieChart } from "@material-ui/icons";
 import React from "react";
 import SmallWidget from "./SmallWidget";
 
-const Widgets = ({ transactionsCount, quotationsCount, productsCount }) => {
+const Widgets = ({
+  transactionsCount,
+  quotationsCount,
+  productsCount,
+  customersCount,
+}) => {
   return (
     <div className="relative bg-blueGray-800 md:pt-8 pb-32 pt-12">
       <div className="px-4 md:px-10 mx-auto w-full">
@@ -23,7 +28,7 @@ const Widgets = ({ transactionsCount, quotationsCount, productsCount }) => {
             <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
               <SmallWidget
                 statSubtitle="NEW CUSTOMERS"
-                statTitle="2,356"
+                statTitle={customersCount}
                 statArrow="down"
                 statPercent="3.48"
                 statPercentColor="text-red-500"

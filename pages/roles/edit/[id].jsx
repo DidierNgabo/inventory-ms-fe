@@ -57,7 +57,7 @@ const EditRole = ({ role }) => {
   return (
     <div className="form-card">
       <h2 className="text-center mb-10 mt-3 text-xl font-semibold">
-        Add new Role
+        Edit Role
       </h2>
       <Form
         layout="vertical"

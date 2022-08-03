@@ -1,18 +1,39 @@
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import axios from "axios";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
+import { useRole } from "../../context/RoleContext";
 
-const newUser = () => {
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${session.user.accessToken}`,
+    },
+  };
+
+  const response = await axios.get("http://localhost:4000/api/roles", config);
+
+  return {
+    props: {
+      roles: response.data,
+    },
+  };
+};
+
+const newUser = ({ roles }) => {
   const [form] = useForm();
   const router = useRouter();
 
   const onFinish = async (values) => {
     try {
+      console.log(values);
       const response = await axios.post(
         "http://localhost:4000/auth/register/",
-        values
+        { ...values, role: values.role.toString() }
       );
       if (response) {
         message.success("User created successfully");
@@ -62,6 +83,30 @@ const newUser = () => {
         <Form.Item
           hasFeedback
           rules={[
+            {
+              required: true,
+              message: "Please input product category",
+            },
+          ]}
+          label="Role"
+          name="role"
+        >
+          <Select
+            showSearch
+            placeholder="Select a role"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().includes(input.toLowerCase())
+            }
+          >
+            {roles.map((category) => (
+              <Option value={category.id}>{category.name}</Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          hasFeedback
+          rules={[
             { required: "true", message: "Please input password" },
             { min: 8, message: "Password can not be less than 8 characters" },
           ]}
@@ -91,7 +136,7 @@ const newUser = () => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="col-span-2 w-1/2 mx-auto">
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

@@ -108,6 +108,7 @@ const Inspections = ({ inspections }) => {
       <CustomTable
         columns={columns}
         data={data}
+        param="doneBy"
         addNewLink="/inspections/new"
       />
     </div>

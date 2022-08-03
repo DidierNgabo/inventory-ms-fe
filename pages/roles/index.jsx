@@ -92,7 +92,12 @@ const Roles = ({ roles }) => {
   ];
   return (
     <div>
-      <CustomTable columns={columns} data={data} addNewLink="/roles/new" />
+      <CustomTable
+        columns={columns}
+        data={data}
+        param="name"
+        addNewLink="/roles/new"
+      />
     </div>
   );
 };

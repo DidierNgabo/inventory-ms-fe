@@ -107,6 +107,7 @@ const Categories = ({ categories }) => {
           <CustomTable
             data={categories}
             columns={columns}
+            param="name"
             addNewLink="/categories/new"
           />
           <UpdateCategoryModal
