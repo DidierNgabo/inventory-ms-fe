@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  FilePdfOutlined,
+} from "@ant-design/icons";
 import { Button, message, Popconfirm, Spin } from "antd";
 import axios from "axios";
 import moment from "moment";
@@ -48,6 +53,18 @@ const Quotations = ({ quotations }) => {
     }
   };
 
+  const generatePdf = async (id) => {
+    try {
+      console.log("working");
+      const response = await axios.get(
+        `http://localhost:4000/api/quotations/pdf/${id}`
+      );
+      console.log(response);
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
   const columns = [
     {
       title: "Quotation number",
@@ -85,9 +102,6 @@ const Quotations = ({ quotations }) => {
           <Link href={`/quotations/${record.id}`}>
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
-          {/* <Link href={`/quotations/${record.id}`}>
-            <Button type="ghost" icon={<Pdf />} />
-          </Link> */}
           <Popconfirm
             title="Are you sure to delete this quotation?"
             onConfirm={() => confirm(record.id)}
@@ -96,6 +110,17 @@ const Quotations = ({ quotations }) => {
           >
             <Button type="ghost" icon={<DeleteOutlined />} />
           </Popconfirm>
+          <a
+            href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/quotations/pdf/${record.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button
+              onClick={() => generatePdf(record.id)}
+              type="ghost"
+              icon={<FilePdfOutlined />}
+            />
+          </a>
         </div>
       ),
     },
@@ -108,6 +133,7 @@ const Quotations = ({ quotations }) => {
           data={data}
           columns={columns}
           addNewLink="/quotations/new"
+          pdfLink="quotations/pdf"
         />
       )}
 

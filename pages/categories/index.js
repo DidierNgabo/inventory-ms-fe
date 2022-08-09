@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, message, Popconfirm, Spin } from "antd";
 import Link from "next/link";
 import CustomTable from "../../components/CustomTable";
@@ -8,7 +8,7 @@ import axios from "axios";
 import UpdateCategoryModal from "../../components/UpdateCategoryModal";
 import { useCategoryContext } from "../../context/CategoryContext";
 import moment from "moment";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -36,7 +36,10 @@ export const getServerSideProps = async (ctx) => {
 const Categories = ({ categories }) => {
   const [visible, setVisible] = React.useState(false);
   const [editData, setEditData] = React.useState();
+  const [data, setData] = useState(categories);
   const router = useRouter();
+  const { data: session } = useSession();
+  const token = session?.user?.accessToken;
   const { deleteCategory } = useCategoryContext();
 
   const hideModal = () => {
@@ -49,9 +52,9 @@ const Categories = ({ categories }) => {
   };
 
   const confirm = (id) => {
-    message.info(deleteCategory(id));
-
-    router.reload();
+    deleteCategory(id, token);
+    setData(data.filter((quotation) => quotation.id !== id));
+    //router.reload();
   };
 
   const columns = [
@@ -105,10 +108,11 @@ const Categories = ({ categories }) => {
       {categories?.length !== 0 && (
         <>
           <CustomTable
-            data={categories}
+            data={data}
             columns={columns}
             param="name"
             addNewLink="/categories/new"
+            pdfLink="categories/pdf"
           />
           <UpdateCategoryModal
             visible={visible}

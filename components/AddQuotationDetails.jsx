@@ -1,6 +1,7 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Popconfirm, Table } from "antd";
 import React from "react";
+import { useProductContext } from "../context/ProductContext";
 import { useQuotation } from "../context/QuotationContext";
 import AdQuotationDetailModal from "./AddQuotationDetailModal";
 
@@ -16,6 +17,7 @@ const AddQuotationDetails = () => {
     handleUpdate,
   } = useQuotation();
 
+  const { data: products } = useProductContext();
   const columns = [
     {
       title: "product name",

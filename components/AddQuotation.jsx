@@ -1,6 +1,7 @@
 import { Form, Input, Select } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import React from "react";
+import { useProductContext } from "../context/ProductContext";
 import { useQuotation } from "../context/QuotationContext";
 import { useUserContext } from "../context/UserContext";
 
@@ -17,7 +18,6 @@ const AddQuotation = () => {
   }
 
   const handleInputChange = () => {
-    console.log("working man");
     setQuotation({
       ...form.getFieldsValue(),
     });

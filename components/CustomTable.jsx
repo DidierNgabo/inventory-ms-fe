@@ -2,22 +2,42 @@ import React from "react";
 import { Button, Table } from "antd";
 import Search from "antd/lib/input/Search";
 import Link from "next/link";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  FilePdfFilled,
+  FilePdfOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import SearchInput from "./Search";
 
-const CustomTable = ({ data, columns, addNewLink, param }) => {
+const CustomTable = ({ data, columns, addNewLink, pdfLink, param }) => {
   return (
     <div>
       <div className="w-full flex items-center justify-between mt-12 mb-8">
         <div className="w-1/3">
           <SearchInput data={data} param={param} />
         </div>
+        <div className="w-1/4 flex items-center justify-between">
+          {pdfLink && (
+            <Link
+              href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${pdfLink}`}
+            >
+              <Button
+                className="bg-green-600"
+                style={{ background: "#76CE02", color: "white" }}
+                icon={<FilePdfOutlined />}
+                size="large"
+              >
+                Export
+              </Button>
+            </Link>
+          )}
 
-        <Link href={addNewLink}>
-          <Button type="primary" icon={<PlusOutlined />} size="large">
-            Add New
-          </Button>
-        </Link>
+          <Link href={addNewLink}>
+            <Button type="primary" icon={<PlusOutlined />} size="large">
+              Add New
+            </Button>
+          </Link>
+        </div>
       </div>
       <Table
         dataSource={data}

@@ -19,7 +19,6 @@ const TransactionProvider = ({ children }) => {
 
   const [transactionsCount, setTransactionsCount] = React.useState(count);
 
-  console.log(count, transactionsCount);
   const deleteTransaction = async (id, token) => {
     try {
       const config = {

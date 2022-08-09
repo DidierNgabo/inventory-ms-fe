@@ -6,28 +6,47 @@ import { useApiRequest } from "../hooks/ApiRequest";
 export const CategoriesContext = React.createContext();
 
 const CategoriesProvider = ({ children }) => {
-  const { data, error, isLoaded } = useApiRequest(
+  const { data: fromServer } = useApiRequest(
     "http://localhost:4000/api/categories"
   );
+  console.log(fromServer);
 
-  const deleteCategory = async (id) => {
+  const [data, setData] = React.useState(fromServer);
+  console.log(data);
+
+  const deleteCategory = async (id, token) => {
+    console.log(token, id);
     try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
       const response = await axios.delete(
-        `http://localhost:4000/api/categories/${id}`
+        `http://localhost:4000/api/categories/${id}`,
+        config
       );
+      console.log(response);
       if (response) {
-        return response.data;
+        message.success(response.data.message);
       }
     } catch (error) {
       message.error(error.message);
     }
   };
 
-  const updateCategory = async (values) => {
+  const updateCategory = async (values, token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     try {
       const response = await axios.put(
         `http://localhost:4000/api/categories/${values.id}`,
-        values
+        values,
+        config
       );
 
       if (response) {
@@ -39,11 +58,17 @@ const CategoriesProvider = ({ children }) => {
     }
   };
 
-  const saveCategory = async (values) => {
+  const saveCategory = async (values, token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
     try {
       const response = await axios.post(
         "http://localhost:4000/api/categories/",
-        values
+        values,
+        config
       );
 
       if (response) {
@@ -60,8 +85,6 @@ const CategoriesProvider = ({ children }) => {
     deleteCategory,
     saveCategory,
     updateCategory,
-    error,
-    isLoaded,
   };
 
   return (
