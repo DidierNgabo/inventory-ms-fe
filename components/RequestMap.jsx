@@ -1,5 +1,5 @@
 import React from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker,MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import { Skeleton } from "antd";
 
 const containerStyle = {
@@ -11,21 +11,26 @@ const RequestMap = ({ address }) => {
   console.log(address);
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyDxxVKoXmMpvOeHp_pMEpOaA0WtEN-oG9o",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
   });
 
   const [map, setMap] = React.useState(null);
 
   const onLoad = React.useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds({
-      lat: address.latitude,
-      lng: address.longitude,
+      lat: -1.9377445286878083,
+      lng: 30.05737782055923,
     });
 
     map.fitBounds(bounds);
     setMap(map);
   }, []);
 
+  const position= {
+    lat: address.latitude, lng: address.longitude
+  }
+
+  console.log(position);
   const onUnmount = React.useCallback(function callback(map) {
     setMap(null);
   }, []);
@@ -33,14 +38,14 @@ const RequestMap = ({ address }) => {
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={containerStyle}
-      center={{ lat: address.latitude, lng: address.longitude }}
-      zoom={15}
+      center={{ lat:-1.9377445286878083, lng: 30.05737782055923 }}
+      zoom={10}
       onLoad={onLoad}
       onUnmount={onUnmount}
     >
       {/* Child components, such as markers, info windows, etc. */}
 
-      <Marker position={{ lat: address.latitude, lng: address.longitude }} />
+      <MarkerF position={ position} />
     </GoogleMap>
   ) : (
     <>

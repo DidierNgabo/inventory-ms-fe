@@ -100,8 +100,14 @@ const QuotationProvider = ({ children }) => {
     setEditingDetail({ ...record });
   };
 
-  const saveQuotation = async () => {
+  const saveQuotation = async (token) => {
     try {
+      console.log(token);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       const details = data.map(({ id, ...detail }) => detail);
       const values = {
         status: quotation.status,
@@ -111,7 +117,7 @@ const QuotationProvider = ({ children }) => {
 
       const response = await axios.post(
         "http://localhost:4000/api/quotation-details/full",
-        values
+        values,config
       );
 
       if (response) {

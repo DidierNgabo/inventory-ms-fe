@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Button, message, Popconfirm, Spin } from "antd";
+import { Button, Popconfirm, Spin } from "antd";
 import Link from "next/link";
 import CustomTable from "../../components/CustomTable";
 import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
-import { useRouter } from "next/router";
 import axios from "axios";
 import UpdateCategoryModal from "../../components/UpdateCategoryModal";
 import { useCategoryContext } from "../../context/CategoryContext";
@@ -37,10 +36,9 @@ const Categories = ({ categories }) => {
   const [visible, setVisible] = React.useState(false);
   const [editData, setEditData] = React.useState();
   const [data, setData] = useState(categories);
-  const router = useRouter();
   const { data: session } = useSession();
   const token = session?.user?.accessToken;
-  const { deleteCategory } = useCategoryContext();
+  const { deleteCategory, updateCategory } = useCategoryContext();
 
   const hideModal = () => {
     setVisible(false);
@@ -50,6 +48,21 @@ const Categories = ({ categories }) => {
     setVisible(true);
     setEditData({ ...record });
   };
+
+
+  const updateCat = (values) =>{
+      updateCategory(values);
+      setData((pre) => {
+        return pre.map((category) => {
+          if (category.id === values.id) {
+            return values;
+          } else {
+            return category;
+          }
+        });
+      });
+  }
+
 
   const confirm = (id) => {
     deleteCategory(id, token);
@@ -80,7 +93,7 @@ const Categories = ({ categories }) => {
       key: "action",
       width: 200,
       fixed: "right",
-      render: (text, record) => (
+      render: (_, record) => (
         <div className="w-4/5 flex items-start justify-between">
           <Button
             type="ghost"
@@ -105,7 +118,7 @@ const Categories = ({ categories }) => {
 
   return (
     <>
-      {categories?.length !== 0 && (
+      {categories && (
         <>
           <CustomTable
             data={data}
@@ -118,10 +131,11 @@ const Categories = ({ categories }) => {
             visible={visible}
             category={editData}
             hide={hideModal}
+            updateCategory={updateCat}
           />
         </>
       )}
-      {categories?.length == 0 && (
+      {!categories && (
         <div className="h-full flex items-center text-2xl justify-center">
           <Spin size="large" />
         </div>

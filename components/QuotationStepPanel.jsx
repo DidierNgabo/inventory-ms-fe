@@ -39,7 +39,7 @@ const QuotationStepPanel = ({ steps, form }) => {
           {item.content}
         </div>
       ))}
-      <div className="steps-action">
+      <div className="steps-action mt-4">
         {activeStep < steps.length - 1 && (
           <Button type="primary" onClick={() => next()}>
             Next

@@ -60,10 +60,9 @@ const InspectionProvider = ({ children }) => {
         config
       );
       if (response) {
-        message.success(response.data.message);
+        message.success("inspection saved successfully");
       }
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };

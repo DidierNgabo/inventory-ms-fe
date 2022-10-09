@@ -4,7 +4,6 @@ import { NotificationsNone } from "@material-ui/icons";
 import { Layout } from "antd";
 import { signOut, useSession } from "next-auth/react";
 import jwt from "jwt-decode";
-import { getSession } from "next-auth/react";
 
 import {
   LogoutOutlined,
@@ -19,9 +18,10 @@ export default function Topbar() {
   const { data: session } = useSession();
   const router = useRouter();
   const token = session?.user?.accessToken;
+  
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/login" });
+    signOut({callbackUrl:"/login"});
     // router.push("/login");
   };
 

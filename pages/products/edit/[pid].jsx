@@ -54,13 +54,11 @@ const EditProduct = ({ product }) => {
       form.resetFields();
       router.push("/products");
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
     message.error(errorInfo);
   };
 
@@ -90,69 +88,6 @@ const EditProduct = ({ product }) => {
           <Input />
         </Form.Item>
         <Form.Item
-          rules={[
-            { required: true, message: "Please input product description" },
-          ]}
-          label="Description"
-          name="description"
-          className="rounded-lg"
-        >
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item
-          hasFeedback
-          rules={[{ required: true, message: "Please input amount in stock" }]}
-          label="Amount in stock"
-          name="amountInStock"
-        >
-          <InputNumber />
-        </Form.Item>
-
-        <Form.Item
-          hasFeedback
-          rules={[{ required: true, message: "Please select VAT" }]}
-          label="VAT inclusive"
-          name="vat"
-        >
-          <Switch defaultChecked />
-        </Form.Item>
-        <Form.Item
-          hasFeedback
-          rules={[{ required: true, message: "Please input product warranty" }]}
-          label="Warranty"
-          name="warranty"
-        >
-          <Input addonAfter={selectAfter} />
-        </Form.Item>
-        <Form.Item
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: "Please input product reorder quantity",
-            },
-          ]}
-          label="Reoder Quantity"
-          name="reorderQuantity"
-        >
-          <InputNumber />
-        </Form.Item>
-
-        <Form.Item
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: "Please input product max stock",
-            },
-          ]}
-          label="Max Stock"
-          name="maximumStock"
-        >
-          <InputNumber />
-        </Form.Item>
-
-        <Form.Item
           hasFeedback
           rules={[
             {
@@ -176,9 +111,85 @@ const EditProduct = ({ product }) => {
             ))}
           </Select>
         </Form.Item>
+        <Form.Item
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Please input product max stock",
+            },
+          ]}
+          label="Max Stock"
+          className="w-full"
+          style={{width:"300px"}}
+          name="maximumStock"
+        >
+          <InputNumber className="w-full"  style={{width:"415px"}}/>
+        </Form.Item>
 
-        <Form.Item className="col-span-2 w-1/2 mx-auto">
-          <Button type="primary" htmlType="submit">
+        <Form.Item
+          hasFeedback
+          rules={[{ required: true, message: "Please input amount in stock" },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue("maximumStock") > value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(
+                new Error("Amount in stock can not be greater than maximum stock")
+              );
+            },
+          }),
+        ]}
+          label="Amount in stock"
+          name="amountInStock"
+        >
+          <InputNumber style={{width:"415px"}} />
+        </Form.Item>
+
+        <Form.Item
+          hasFeedback
+          rules={[{ required: true, message: "Please select VAT" }]}
+          label="VAT inclusive"
+          name="vat"
+        >
+          <Switch defaultChecked />
+        </Form.Item>
+        <Form.Item
+          hasFeedback
+          rules={[{ required: true, message: "Please input product warranty" }]}
+          label="Warranty"
+          name="warranty"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          hasFeedback
+          rules={[
+            {
+              required: true,
+              message: "Please input product reorder quantity",
+            },
+          ]}
+          label="Reoder Quantity"
+          name="reorderQuantity"
+        >
+          <InputNumber style={{width:"415px"}} />
+        </Form.Item>
+
+        <Form.Item
+          rules={[
+            { required: true, message: "Please input product description" },
+          ]}
+          label="Description"
+          name="description"
+          className="rounded-lg"
+        >
+          <Input.TextArea />
+        </Form.Item>
+
+        <Form.Item className="col-span-2 w-full">
+          <Button type="primary" style={{width:"415px",margin:"40px 200px"}} htmlType="submit">
             Submit
           </Button>
         </Form.Item>

@@ -40,8 +40,6 @@ const RequestProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-
-      console.log(values);
       const response = await axios.patch(
         `http://localhost:4000/api/requests/${values.id}`,
         values,
@@ -58,7 +56,7 @@ const RequestProvider = ({ children }) => {
             }
           });
         });
-        message.success(response.data.message);
+        message.success("Request Updated Successfully");
       }
     } catch (error) {
       message.error(error.message);
@@ -85,7 +83,7 @@ const RequestProvider = ({ children }) => {
       );
 
       if (response) {
-        message.success(response.data.message);
+        message.success("Request Saved Successfully");
       }
     } catch (error) {
       console.log(error);

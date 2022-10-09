@@ -1,23 +1,22 @@
-import { MoreOutlined } from "@ant-design/icons";
-import { Button, Tag } from "antd";
+import { Tag, Spin, message } from "antd";
 import axios from "axios";
 import React from "react";
 import ActionMenu from "../../components/ActionMenu";
 import CustomTable from "../../components/CustomTable";
-import { getSession } from "next-auth/react";
+import { useState } from "react";
+import { useProductContext } from "../../context/ProductContext";
 
-export const getServerSideProps = async (ctx) => {
-  const session = await getSession(ctx);
+export const getServerSideProps = async () => {
+  // const session = await getSession(ctx);
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${session.user.accessToken}`,
-    },
-  };
+  // const config = {
+  //   headers: {
+  //     Authorization: `Bearer ${session.user.accessToken}`,
+  //   },
+  // };
 
   const response = await axios.get(
     "http://localhost:4000/api/products",
-    config
   );
 
   return {
@@ -28,6 +27,15 @@ export const getServerSideProps = async (ctx) => {
 };
 
 export const Products = ({ products }) => {
+  const [data,setData] = useState(products);
+  const { deleteProduct } = useProductContext();
+
+  const deleteData = (id) =>{
+    const deleted = deleteProduct(id);
+    message.info("Product Deleted successfully");
+    setData(data.filter((product) => product.id !== id));
+  }
+
   const columns = [
     {
       title: "Name",
@@ -76,22 +84,22 @@ export const Products = ({ products }) => {
       key: "action",
       dataIndex: "action",
       width: 80,
-      render: (text, record) => <ActionMenu link="/products" record={record} />,
+      render: (_, record) => <ActionMenu link="/products" record={record} deleteProduct={deleteData} />,
     },
   ];
 
   return (
     <>
-      {products?.length !== 0 && (
+      {data && (
         <CustomTable
-          data={products}
+          data={data}
           param="name"
           columns={columns}
           addNewLink="/products/new"
         />
       )}
 
-      {products?.length == 0 && (
+      {!data && (
         <div className="h-full flex items-center text-2xl justify-center">
           <Spin size="large" />
         </div>

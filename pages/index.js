@@ -10,7 +10,7 @@ export const getServerSideProps = async (ctx) => {
 
   const config = {
     headers: {
-      Authorization: `Bearer ${session.user.accessToken}`,
+      Authorization: `Bearer ${session?.user.accessToken}`,
     },
   };
 
@@ -38,6 +38,11 @@ export const getServerSideProps = async (ctx) => {
     "http://localhost:4000/api/users/role/customer",
     config
   );
+  
+  const onlineRequests = await axios.get(
+    "http://localhost:4000/api/requests/status",
+    config
+  );
 
   return {
     props: {
@@ -46,6 +51,7 @@ export const getServerSideProps = async (ctx) => {
       quotationsStatusCount: quotationsStatus.data,
       productsCount: productsResponse.data,
       customersCount: customersResponse.data,
+      requests:onlineRequests.data
     },
   };
 };
@@ -56,6 +62,7 @@ const Home = ({
   productsCount,
   customersCount,
   quotationsStatusCount,
+  requests
 }) => {
   return (
     <>
@@ -71,7 +78,7 @@ const Home = ({
         />
         <div className="w-full flex p-2 items-center justify-center">
           <div className="w-1/2 p-1">
-            <CardLineChart />
+            <CardLineChart requests={requests} />
           </div>
           <div className="w-1/2 p-1">
             <CardPieChart count={quotationsStatusCount} />

@@ -16,7 +16,6 @@ const NewTransaction = () => {
   const token = session?.user?.accessToken;
 
   const onFinish = (values) => {
-    console.log(values);
     try {
       saveTransaction(values, token);
       form.resetFields();
@@ -85,7 +84,18 @@ const NewTransaction = () => {
         </Form.Item>
         <Form.Item
           hasFeedback
-          rules={[{ required: true, message: "quantity can not be null" }]}
+          rules={[{ required: true, message: "quantity can not be null"},
+          // ({ getFieldValue }) => ({
+          //   validator(_, value) {
+          //     if (!value ||  data.find((product)=>product.id == getFieldValue("product")) > value) {
+          //       return Promise.resolve();
+          //     }
+          //     return Promise.reject(
+          //       new Error("Amount in stock can not be greater than maximum stock")
+          //     );
+          //   },
+          // }),
+        ]}
           label="Quantity"
           name="quantity"
         >

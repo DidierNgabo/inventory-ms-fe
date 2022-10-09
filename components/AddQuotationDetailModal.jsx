@@ -4,6 +4,9 @@ import { useQuotation } from "../context/QuotationContext";
 
 const AdQuotationDetailModal = ({ title, action, visibility }) => {
   const { setEditingDetail, editingDetail, resetEditing } = useQuotation();
+
+  console.log(editingDetail);
+
   return (
     <div>
       <Modal

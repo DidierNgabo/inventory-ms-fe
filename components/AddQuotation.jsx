@@ -10,6 +10,9 @@ const AddQuotation = () => {
   const { quotation, setQuotation } = useQuotation();
   const [form] = useForm();
 
+
+  const customers = data.filter((customer)=>customer.role.name.toLowerCase() === 'customer');
+
   if (quotation) {
     form.setFieldsValue({
       customer: quotation.customer,
@@ -27,7 +30,7 @@ const AddQuotation = () => {
     <div className="mt-5 w-4/5 mx-auto">
       <div className="grid grid-cols-2 gap-4">
         <Form form={form}>
-          <Form.Item
+          {/* <Form.Item
             rules={[{ required: true, message: "status" }]}
             label="Status"
             name="status"
@@ -37,7 +40,7 @@ const AddQuotation = () => {
               onChange={handleInputChange}
               className="rounded-lg h-8 w-4/5"
             />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             hasFeedback
@@ -59,8 +62,8 @@ const AddQuotation = () => {
                 option.children.toLowerCase().includes(input.toLowerCase())
               }
             >
-              {data.map((customer) => (
-                <Option value={customer.name}>{customer.name}</Option>
+              {customers.map((customer) => (
+                <Option value={customer.id}>{customer.name}</Option>
               ))}
             </Select>
           </Form.Item>

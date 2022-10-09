@@ -21,5 +21,5 @@ export const useApiRequest = (url) => {
     fetchData();
   }, [url]);
 
-  return { error, data, isLoaded };
+  return { error, data,setData, isLoaded };
 };

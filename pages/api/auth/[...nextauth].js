@@ -8,7 +8,7 @@ export default NextAuth({
       name: "custom",
       credentials: {
         email: { label: "email", type: "text", placeholder: "youremail@gmail" },
-        password: { label: "password", type: "text" },
+        password: { label: "password", type: "password" },
       },
 
       async authorize(credentials, req) {
@@ -39,6 +39,8 @@ export default NextAuth({
   secret: "supersecret",
   pages: {
     signIn: "/login",
+    signOut:"/login",
+    newUser:"/register"
   },
   callbacks: {
     async jwt({ token, user, account }) {

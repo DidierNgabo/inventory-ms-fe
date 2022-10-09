@@ -2,10 +2,8 @@ import { Button, Form, Input, Modal } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { useRouter } from "next/router";
 import React from "react";
-import { useCategoryContext } from "../context/CategoryContext";
 
-const UpdateCategoryModal = ({ category, visible, hide }) => {
-  const { updateCategory } = useCategoryContext();
+const UpdateCategoryModal = ({ category, visible, hide,updateCategory }) => {
   const [form] = useForm();
   const router = useRouter();
 
@@ -22,7 +20,6 @@ const UpdateCategoryModal = ({ category, visible, hide }) => {
       updateCategory(values);
       form.resetFields();
       hide();
-      router.push("/categories");
     } catch (error) {
       message.error(error.message);
     }
@@ -37,8 +34,7 @@ const UpdateCategoryModal = ({ category, visible, hide }) => {
       title="Update Category"
       centered
       visible={visible}
-      onOk={hide}
-      okText="Submit"
+      okButtonProps={{style:{display:'none'}}}
       onCancel={hide}
       width={1000}
     >

@@ -7,7 +7,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CardPieChart = ({ count }) => {
   const data = {
-    labels: ["Rejected", "Approved", "Accepted"],
+    labels: ["Rejected", "Created", "Accepted"],
     datasets: [
       {
         label: "status of Quotations",

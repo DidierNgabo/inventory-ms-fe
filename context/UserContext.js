@@ -5,7 +5,7 @@ export const UsersContext = React.createContext();
 
 const UsersProvider = ({ children }) => {
   const [user, setUser] = React.useState("");
-  const { data, error, isLoaded } = useApiRequest(
+  const { data, error, isLoaded,setData } = useApiRequest(
     "http://localhost:4000/api/users"
   );
 
@@ -24,6 +24,7 @@ const UsersProvider = ({ children }) => {
     data,
     error,
     isLoaded,
+    setData
   };
 
   return (

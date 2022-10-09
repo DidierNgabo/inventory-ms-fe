@@ -99,14 +99,14 @@ const Transactions = ({ transactions }) => {
       width: 200,
       fixed: "right",
       render: (_, record) => (
-        <div className="w-4/5 flex items-start justify-between">
+        <div className="w-3/5 flex items-start justify-between">
           <Link href={`/transactions/edit/${record.id}`}>
             <Button type="ghost" icon={<EditOutlined />} />
           </Link>
 
-          <Link href={`/transactions/${record.id}`}>
+          {/* <Link href={`/transactions/${record.id}`}>
             <Button type="ghost" icon={<EyeOutlined />} />
-          </Link>
+          </Link> */}
           <Popconfirm
             title="Are you sure to delete this transaction?"
             onConfirm={() => confirm(record.id)}

@@ -61,16 +61,16 @@ export default function Sidebar() {
       icon: <FileDoneOutlined />,
       children: [
         {
-          label: <Link href="/quotations/">Quotations</Link>,
-          key: "quotations",
-        },
-        {
           label: <Link href="/requests/">Online Requests</Link>,
           key: "requests",
         },
         {
           label: <Link href="/inspections/">Inspections</Link>,
           key: "inspections",
+        },
+        {
+          label: <Link href="/quotations/">Quotations</Link>,
+          key: "quotations",
         },
       ],
     },
@@ -144,6 +144,11 @@ export default function Sidebar() {
       key: "requests",
       icon: <Dashboard />,
     },
+    {
+      label: <Link href="/quotations/">Quotations</Link>,
+      key: "quotations",
+      icon: <Dashboard />,
+    },
   ];
 
   return (
@@ -171,11 +176,11 @@ export default function Sidebar() {
           items={
             !user
               ? menuItemsAdmin
-              : user.role.name === "admin"
+              : user.role.name.toLowerCase() === "admin"
               ? menuItemsAdmin
-              : user.role.name === "accountant"
+              : user.role.name.toLowerCase() === "accountant"
               ? menuItemsAccountant
-              : user.role.name === "technician"
+              : user.role.name.toLowerCase() === "technician"
               ? menuItemsTechnician
               : menuItemsCustomer
           }

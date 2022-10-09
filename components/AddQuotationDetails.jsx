@@ -17,7 +17,6 @@ const AddQuotationDetails = () => {
     handleUpdate,
   } = useQuotation();
 
-  const { data: products } = useProductContext();
   const columns = [
     {
       title: "product name",
@@ -28,17 +27,18 @@ const AddQuotationDetails = () => {
     {
       title: "unit cost",
       dataIndex: "unityCost",
-      width: "25%",
+      width: "20%",
       editable: true,
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
-      width: "25%",
+      width: "20%",
       editable: true,
     },
     {
       title: "Action",
+      width:"20%",
       dataIndex: "action",
       render: (_, record) => (
         <div className="w-4/5 flex items-start justify-between">
@@ -49,7 +49,7 @@ const AddQuotationDetails = () => {
           />
 
           <Popconfirm
-            title="Are you sure to delete this order detail?"
+            title="Are you sure to delete this quotation detail?"
             onConfirm={() => deleteDetail(record)}
             okText="Yes"
             cancelText="No"

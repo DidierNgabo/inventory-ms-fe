@@ -4,29 +4,26 @@ import {
   EyeOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Menu, message, Popconfirm } from "antd";
+import { Button, Dropdown, Menu, Popconfirm } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { useProductContext } from "../context/ProductContext";
 
-const menu = (link, record) => {
+const menu = (link, record,deleteProduct) => {
   const router = useRouter();
-  const { deleteProduct } = useProductContext();
-  const confirm = (id) => {
-    message.info(deleteProduct(id));
-
-    router.reload();
-  };
+  // const confirm = (id) => {
+  //   message.info(deleteProduct(id));
+  //   // router.reload();
+  // };
   return (
     <Menu
       className=""
       items={[
-        {
-          label: <Link href={`${link}/${record.id}`}> View</Link>,
-          key: "0",
-          icon: <EyeOutlined />,
-        },
+        // {
+        //   label: <Link href={`${link}/${record.id}`}> View</Link>,
+        //   key: "0",
+        //   icon: <EyeOutlined />,
+        // },
         {
           label: <Link href={`${link}/edit/${record.id}`}>Edit</Link>,
           key: "1",
@@ -35,8 +32,8 @@ const menu = (link, record) => {
         {
           label: (
             <Popconfirm
-              title="Are you sure to delete this category?"
-              onConfirm={() => confirm(record.id)}
+              title="Are you sure to delete this Product?"
+              onConfirm={() => deleteProduct(record.id)}
               okText="Yes"
               placement="topRight"
               cancelText="No"
@@ -52,11 +49,11 @@ const menu = (link, record) => {
   );
 };
 
-const ActionMenu = ({ link, record }) => {
+const ActionMenu = ({ link, record,deleteProduct }) => {
   return (
     <Dropdown
       className="ml-2 cursor-pointer"
-      overlay={menu(link, record)}
+      overlay={menu(link, record,deleteProduct)}
       placement="bottom"
       trigger={["click"]}
     >

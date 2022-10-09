@@ -13,16 +13,16 @@ const CustomTable = ({ data, columns, addNewLink, pdfLink, param }) => {
   return (
     <div>
       <div className="w-full flex items-center justify-between mt-12 mb-8">
-        <div className="w-1/3">
+        <div className="">
           <SearchInput data={data} param={param} />
         </div>
-        <div className="w-1/4 flex items-center justify-between">
+        <div className=" flex items-center justify-between">
           {pdfLink && (
             <Link
               href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/${pdfLink}`}
             >
               <Button
-                className="bg-green-600"
+                className="bg-green-600 mr-4"
                 style={{ background: "#76CE02", color: "white" }}
                 icon={<FilePdfOutlined />}
                 size="large"
@@ -32,11 +32,11 @@ const CustomTable = ({ data, columns, addNewLink, pdfLink, param }) => {
             </Link>
           )}
 
-          <Link href={addNewLink}>
-            <Button type="primary" icon={<PlusOutlined />} size="large">
+         {  <Link href={addNewLink}>
+            <Button type="primary"  icon={<PlusOutlined />} size="large">
               Add New
             </Button>
-          </Link>
+          </Link>} 
         </div>
       </div>
       <Table

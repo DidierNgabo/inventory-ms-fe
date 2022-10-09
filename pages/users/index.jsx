@@ -7,19 +7,56 @@ import CustomTable from "../../components/CustomTable";
 import { UsersContext } from "../../context/UserContext";
 
 const Users = () => {
-  const { data, error, isLoaded } = React.useContext(UsersContext);
+  const { data, error, isLoaded,setData } = React.useContext(UsersContext);
   const confirm = async (id) => {
     try {
       const response = await axios.delete(
         `http://localhost:4000/api/users/${id}`
       );
       if (response) {
-        message.success("pharmacy deleted successfully");
+        message.success("User deleted successfully");
       }
     } catch (error) {
       message.error(error.message);
     }
   };
+
+  const activate = async (id) =>{
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/users/${id}`,{
+          isActive:true
+        }
+      );
+
+      
+      setData((prev) =>  prev.map((prev) =>
+      prev.id === id ? { ...prev, isActive: true } : prev
+    ))
+
+      // if (response) {
+      //   message.success("User activated successfully");
+      // }
+    } catch (error) {
+      message.error(error.message);
+    }
+  }
+
+  const deactivate = async(id) =>{
+    try {
+      const response = await axios.put(
+        `http://localhost:4000/api/users/${id}`,{
+          isActive:false
+        }
+      );
+      console.log(response);
+      setData((prev) =>  prev.map((prev) =>
+      prev.id === id ? { ...prev, isActive: false } : prev
+    ))
+    } catch (error) {
+      message.error(error.message);
+    }
+  }
 
   const columns = [
     {
@@ -48,8 +85,23 @@ const Users = () => {
       key: "isActive",
       render: (text, record) => (
         <>
-          {record.isActive && <Tag color="green">ACTIVE</Tag>}
-          {!record.isActive && <Tag color="volcano">INACTIVE</Tag>}
+         <Popconfirm
+            title="Are you sure to deactivate this user?"
+            onConfirm={() => deactivate(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+             {record.isActive && <Tag color="green">ACTIVE</Tag>}
+          </Popconfirm>
+         
+          <Popconfirm
+            title="Are you sure to activate this user?"
+            onConfirm={() => activate(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+             {!record.isActive && <Tag color="volcano">INACTIVE</Tag>}
+          </Popconfirm>
         </>
       ),
     },

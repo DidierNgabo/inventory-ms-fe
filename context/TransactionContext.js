@@ -46,8 +46,6 @@ const TransactionProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-
-      console.log(values);
       const response = await axios.patch(
         `http://localhost:4000/api/transactions/${values.id}`,
         values,
@@ -64,7 +62,7 @@ const TransactionProvider = ({ children }) => {
             }
           });
         });
-        message.success(response.data.message);
+        message.success("Transaction updated Successfully");
       }
     } catch (error) {
       message.error(error.message);
@@ -86,11 +84,10 @@ const TransactionProvider = ({ children }) => {
       );
 
       if (response) {
-        data.push(values);
-        message.success(response.data.message);
+        setData((prev)=>[...prev,values])
+        message.success("Transaction Saved Sucessfully");
       }
     } catch (error) {
-      console.log(error);
       message.error(error.message);
     }
   };

@@ -4,7 +4,7 @@ import {
   EyeOutlined,
   FilePdfOutlined,
 } from "@ant-design/icons";
-import { Button, message, Popconfirm, Spin } from "antd";
+import { Button, message, Popconfirm, Spin, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
@@ -12,7 +12,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import CustomTable from "../../components/CustomTable";
 
-import { getSession } from "next-auth/react";
+import { getSession,useSession } from "next-auth/react";
+import jwt from "jwt-decode";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -36,8 +37,18 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const Quotations = ({ quotations }) => {
-  const router = useRouter();
   const [data, setData] = React.useState(quotations);
+  const { data: session } = useSession();
+  const router = useRouter();
+  const token = session?.user?.accessToken;
+
+  let user = null;
+
+  if (token) {
+    user = jwt(token);
+  }
+
+  console.log(user);
 
   const confirm = async (id) => {
     try {
@@ -55,11 +66,9 @@ const Quotations = ({ quotations }) => {
 
   const generatePdf = async (id) => {
     try {
-      console.log("working");
       const response = await axios.get(
         `http://localhost:4000/api/quotations/pdf/${id}`
       );
-      console.log(response);
     } catch (error) {
       message.error(error.message);
     }
@@ -75,6 +84,11 @@ const Quotations = ({ quotations }) => {
       title: "customer",
       dataIndex: "customer",
       key: "customer",
+      render: (_, record) => (
+        <Link href={`/users/${record.customer.id}`}>
+          <Typography.Link>{record.customer.name}</Typography.Link>
+        </Link>
+      ),
     },
     {
       title: "status",
@@ -128,7 +142,7 @@ const Quotations = ({ quotations }) => {
 
   return (
     <>
-      {quotations?.length !== 0 && (
+      {quotations && (
         <CustomTable
           data={data}
           columns={columns}
@@ -137,7 +151,7 @@ const Quotations = ({ quotations }) => {
         />
       )}
 
-      {quotations?.length == 0 && (
+      {!quotations && (
         <div className="h-full flex items-center text-2xl justify-center">
           <Spin size="large" />
         </div>

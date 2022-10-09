@@ -1,5 +1,5 @@
 import { Button, Form, Input, message, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "antd/lib/form/Form";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -7,19 +7,23 @@ import Link from "next/link";
 
 const Signup = () => {
   const [form] = useForm();
+  const [loading, setloading] = useState(false);
   const router = useRouter();
 
   const onFinish = async (values) => {
     try {
+      setloading(true);
       const response = await axios.post(
         "http://localhost:4000/auth/register/",
-        { ...values, role: "8" }
+        { ...values, role: "6" }
       );
       if (response) {
+        
         message.success(
           "User created successfully,Please check your email to confirm"
         );
         form.resetFields();
+        setloading(false);
         router.push("/login");
       }
     } catch (error) {
@@ -31,10 +35,12 @@ const Signup = () => {
     message.error(errorInfo);
   };
   return (
-    <div className="w-full flex items-center justify-center h-screen">
+    <div className="w-full flex flex-col items-center justify-center h-screen">
+      <h2 className="text-xl">Signup</h2>
       <Form
         layout="vertical"
         onFinish={onFinish}
+        className="w-4/5"
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -89,15 +95,15 @@ const Signup = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Sign In
+          <Button type="primary" loading={loading} className="w-full" htmlType="submit">
+            Sign up
           </Button>
         </Form.Item>
       </Form>
 
-      {/* <Typography.Link>
+      
         <Link href="/login">Already have an account login please</Link>
-      </Typography.Link> */}
+      
     </div>
   );
 };

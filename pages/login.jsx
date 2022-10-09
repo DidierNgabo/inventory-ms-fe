@@ -3,11 +3,12 @@ import { useForm } from "antd/lib/form/Form";
 import { signIn, getCsrfToken } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 
 const Login = ({ csrfToken }) => {
   const [form] = useForm();
   const [error, setError] = React.useState(null);
+  const [loading, setloading] = useState(false);
   const router = useRouter();
 
   if (csrfToken) {
@@ -18,6 +19,7 @@ const Login = ({ csrfToken }) => {
 
   const onFinish = async (values) => {
     try {
+      setloading(true)
       const res = await signIn("credentials", {
         redirect: false,
         email: values.email,
@@ -26,15 +28,17 @@ const Login = ({ csrfToken }) => {
       });
 
       if (res?.error) {
+        setloading(false);
         setError(res.error);
         message.error("bad credentials", 2);
       } else {
+        setloading(false);
         setError(null);
         message.success("logged in sucessfully", 2);
       }
       if (res.url) router.push(res.url);
     } catch (error) {
-      console.log(error);
+      setloading(false);
       message.error(error.message);
     }
   };
@@ -45,18 +49,15 @@ const Login = ({ csrfToken }) => {
   };
 
   return (
-    <div className="w-full flex items-center justify-center h-screen">
+    <div className="w-full flex flex-col items-center justify-center h-screen">
+      <h2 className="text-xl">Login</h2>
       <Form
         name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
         initialValues={{}}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        layout="vertical"
+        className="w-4/5"
         autoComplete="off"
       >
         <Form.Item hidden label="Token" name="csrfToken">
@@ -66,6 +67,7 @@ const Login = ({ csrfToken }) => {
         <Form.Item
           label="Email"
           name="email"
+          className=""
           rules={[
             {
               required: true,
@@ -89,21 +91,15 @@ const Login = ({ csrfToken }) => {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
+        <Form.Item>
+          <Button type="primary"   className="w-full"  htmlType="submit">
             Login
           </Button>
         </Form.Item>
       </Form>
 
-      {/* <Typography.Link className="mt-8">
-        <Link href="/signup"> have no account signup please</Link>
-      </Typography.Link> */}
+        <Link href="/signup"> Don't have an account signup please</Link>
+      
     </div>
   );
 };
@@ -112,11 +108,11 @@ Login.layout = "L2";
 
 export default Login;
 
-// // This is the recommended way for Next.js 9.3 or newer
-// export async function getServerSideProps(context) {
-//   return {
-//     props: {
-//       csrfToken: await getCsrfToken(context),
-//     },
-//   };
-// }
+// This is the recommended way for Next.js 9.3 or newer
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+}

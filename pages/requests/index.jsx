@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
+import { CheckOutlined, DeleteOutlined, EditOutlined, EyeOutlined } from "@ant-design/icons";
 import { Button, message, Popconfirm, Tag, Typography } from "antd";
 import axios from "axios";
 import moment from "moment";
@@ -6,7 +6,7 @@ import { getSession, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import CustomTable from "../../components/CustomTable";
-import RequestMap from "../../components/RequestMap";
+import jwt from "jwt-decode";
 
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
@@ -35,6 +35,12 @@ const Requests = ({ requests }) => {
 
   const token = session?.user?.accessToken;
 
+  let user = null;
+
+  if (token) {
+    user = jwt(token);
+  }
+
   const confirm = async (id) => {
     try {
       const config = {
@@ -54,6 +60,37 @@ const Requests = ({ requests }) => {
       message.error(error.message);
     }
   };
+
+  const markInspected = async (record) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const inspected = {...record,status:'inspected'};
+      const response = await axios.patch(
+        `http://localhost:4000/api/requests/${record.id}`,inspected,
+        config
+      );
+      if (response) {
+        message.success("request status changed successfully");
+        setData((pre) => {
+          return pre.map((transaction) => {
+            if (transaction.id === record.id) {
+              return record;
+            } else {
+              return transaction;
+            }
+          });
+        });
+      }
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
   const columns = [
     {
       title: "ReqNo",
@@ -121,13 +158,23 @@ const Requests = ({ requests }) => {
             <Button type="ghost" icon={<EyeOutlined />} />
           </Link>
           <Popconfirm
-            title="Are you sure to delete this transaction?"
+            title="Are you sure to delete this online request?"
             onConfirm={() => confirm(record.id)}
             okText="Yes"
             cancelText="No"
           >
             <Button type="ghost" icon={<DeleteOutlined />} />
           </Popconfirm>
+          { user.role.name !=='customer' &&
+          <Popconfirm
+            title="Mark as Inspected?"
+            onConfirm={() => markInspected(record)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="ghost" icon={<CheckOutlined />} />
+          </Popconfirm>
+         }
         </div>
       ),
     },

@@ -1,149 +1,58 @@
 import React from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Skeleton } from "antd";
+import { GoogleMap,MarkerF, useJsApiLoader } from "@react-google-maps/api";
 
-export default function CardLineChart() {
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
+export default function CardLineChart({requests}) {
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: "AIzaSyDxxVKoXmMpvOeHp_pMEpOaA0WtEN-oG9o",
+  });
+
+  const [map, setMap] = React.useState(null);
+
+
+  const onLoad = React.useCallback(function callback(map) {
+    const bounds = new window.google.maps.LatLngBounds({
+      lat: -1.9377445286878083,
+      lng: 30.05737782055923,
+    });
+
+    map.fitBounds(bounds);
+    setMap(map);
+  }, []);
+
+  // const position= {
+  //   lat: address.latitude, lng: address.longitude
+  // }
+
+  const onUnmount = React.useCallback(function callback(map) {
+    setMap(null);
+  }, []);
   // React.useEffect(() => {}, []);
 
-  return (
+  return isLoaded ? (
     <>
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-[#021529]">
-        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-[#2291FF] mb-1 text-xs font-semibold">
-                Overview
-              </h6>
-              <h2 className="text-white text-xl font-semibold">
-                Online Requests
-              </h2>
-            </div>
-          </div>
-        </div>
-        <div className="p-3 flex-auto">
-          {/* Chart */}
-          <div className="relative">
-            <Line
-              datasetIdKey="id"
-              data={{
-                labels: [
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday",
-                  "Sunday",
-                ],
-                datasets: [
-                  {
-                    label: "this week",
-                    backgroundColor: "#2291FF",
-                    borderColor: "#2291FF",
-                    data: [5, 10, 13, 20, 15, 19, 21],
-                    fill: false,
-                  },
-                  {
-                    label: "last week",
-                    fill: false,
-                    backgroundColor: "#fff",
-                    borderColor: "#fff",
-                    data: [23, 12, 32, 15, 32, 54, 2],
-                  },
-                ],
-                options: {
-                  maintainAspectRatio: false,
-                  responsive: true,
-                  title: {
-                    display: false,
-                    text: "Sales Charts",
-                    fontColor: "white",
-                  },
-                  legend: {
-                    labels: {
-                      fontColor: "white",
-                    },
-                    align: "end",
-                    position: "bottom",
-                  },
-                  tooltips: {
-                    mode: "index",
-                    intersect: false,
-                  },
-                  hover: {
-                    mode: "nearest",
-                    intersect: true,
-                  },
-                  scales: {
-                    xAxes: [
-                      {
-                        ticks: {
-                          fontColor: "rgba(255,255,255,.7)",
-                        },
-                        display: true,
-                        scaleLabel: {
-                          display: false,
-                          labelString: "Week",
-                          fontColor: "white",
-                        },
-                        gridLines: {
-                          display: false,
-                          borderDash: [2],
-                          borderDashOffset: [2],
-                          color: "rgba(33, 37, 41, 0.3)",
-                          zeroLineColor: "rgba(0, 0, 0, 0)",
-                          zeroLineBorderDash: [2],
-                          zeroLineBorderDashOffset: [2],
-                        },
-                      },
-                    ],
-                    yAxes: [
-                      {
-                        ticks: {
-                          fontColor: "rgba(255,255,255,.7)",
-                        },
-                        display: true,
-                        scaleLabel: {
-                          display: false,
-                          labelString: "Value",
-                          fontColor: "white",
-                        },
-                        gridLines: {
-                          borderDash: [3],
-                          borderDashOffset: [3],
-                          drawBorder: false,
-                          color: "rgba(255, 255, 255, 0.15)",
-                          zeroLineColor: "rgba(33, 37, 41, 0)",
-                          zeroLineBorderDash: [2],
-                          zeroLineBorderDashOffset: [2],
-                        },
-                      },
-                    ],
-                  },
-                },
-              }}
-            />
-          </div>
-        </div>
+      <GoogleMap
+      mapContainerStyle={{width:"100%",height:"360px"}}
+      center={{ lat:-1.9377445286878083, lng: 30.05737782055923 }}
+      zoom={10}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+    >
+      {/* Child components, such as markers, info windows, etc. */}
+
+      {requests && <>
+        {requests.map((request)=><MarkerF position={ {lat:request.address.latitude,lng:request.address.longitude}} />)}
+      </>}
+      
+    </GoogleMap>
+       
       </div>
+    </>
+  ) : (
+    <>
+      <Skeleton />
     </>
   );
 }
